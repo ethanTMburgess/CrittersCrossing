@@ -1,6 +1,6 @@
 
 #ifndef PLATFORMER_GAME_H
-#define PLATFORMER_GAME_H
+#define CrittersCrossing
 
 #include <SFML/Graphics.hpp>
 #include "GameObject.h"

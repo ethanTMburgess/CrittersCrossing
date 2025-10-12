@@ -21,22 +21,22 @@ Game::~Game()
 
 bool Game::init()
 {
-	officeBack.getImageFromPath("../Data/assets/crossing/critters/grey office back.png");
+	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 	officeBack.setPosition(0, 0);
-	background.getImageFromPath("../Data/assets/crossing/crossing background.png");
+	background.getImageFromPath("../Data/assets/crossing/UI/crossing background.png");
 	background.setPosition(0, 0);
 	//yes button
-	yesButton.getImageFromPath("../Data/assets/UI/yes button.png");
+	yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
 	yesButton.setPosition(290 - 5, 20);
 	//no button
-	noButton.getImageFromPath("../Data/assets/UI/no button.png");
+	noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
 	noButton.setPosition(390 - 15, 20);
 	//next button
-	nextButton.getImageFromPath("../Data/assets/UI/next button.png");
+	nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
 	nextButton.setPosition(490 - 10, 20);
 
 	//passport
-	passport.getImageFromPath("../Data/assets/crossing/closed passport.png");
+	passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
 	passport.setPosition(130, 205);
 
 	selectCritter();
@@ -58,7 +58,7 @@ void Game::update(float dt)
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
-				yesButton.getImageFromPath("../Data/assets/UI/yes button.png");
+				yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
 				yesButtonPressed = false;
 				ButtonTimer = 0.0f;
 				
@@ -71,7 +71,7 @@ void Game::update(float dt)
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
-				noButton.getImageFromPath("../Data/assets/UI/no button.png");
+				noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
 				noButtonPressed = false;
 				ButtonTimer = 0.0f;
 			}
@@ -83,7 +83,7 @@ void Game::update(float dt)
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
-				nextButton.getImageFromPath("../Data/assets/UI/next button.png");
+				nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
 				nextButtonPressed = false;
 				ButtonTimer = 0.0f;
 			}
@@ -155,9 +155,9 @@ void Game::mouseClicked(sf::Event event)
 	{
 
 		std::cout << "yes button clicked\n";
-		yesButton.getImageFromPath("../Data/assets/UI/yes button pressed.png");
+		yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/critters/green office back.png");
+		officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
 		yesButtonPressed = true;
 		ButtonTimer = 0.0f;
 		
@@ -167,9 +167,9 @@ void Game::mouseClicked(sf::Event event)
 	if (collisionCheck(worldClick, noButton))
 	{
 		std::cout << "no button clicked\n";
-		noButton.getImageFromPath("../Data/assets/UI/no button pressed.png");
+		noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/critters/red office back.png");
+		officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
 		noButtonPressed = true;
 		ButtonTimer = 0.0f;
 
@@ -179,9 +179,9 @@ void Game::mouseClicked(sf::Event event)
 	if (collisionCheck(worldClick, nextButton))
 	{
 		std::cout << "next button clicked\n";
-		nextButton.getImageFromPath("../Data/assets/UI/next button pressed.png");
+		nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/critters/grey office back.png");
+		officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 		nextButtonPressed = true;
 		ButtonTimer = 0.0f;
 
@@ -246,7 +246,7 @@ void Game::mouseMoved(sf::Event event)
 		{
 
 			passport.sprite.scale(1, 2);
-			passport.getImageFromPath("../Data/assets/crossing/passport.png");
+			passport.getImageFromPath("../Data/assets/crossing/UI/passport.png");
 			passportOpened = true;
 		}
 
@@ -254,7 +254,7 @@ void Game::mouseMoved(sf::Event event)
 		else if (passportPos.x <= 259 - 117 && passportOpened == true)
 		{
 			passport.sprite.scale(1, 0.5);
-			passport.getImageFromPath("../Data/assets/crossing/closed passport.png");
+			passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
 			passportOpened = false;
 		}
 
