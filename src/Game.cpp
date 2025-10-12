@@ -96,6 +96,17 @@ void Game::update(float dt)
 			critter.setSpeed(3);
 			critter.move(critter.getVector()->x * critter.getSpeed(), critter.getVector()->y * critter.getSpeed());
 		}
+		if(critter.sprite.getPosition().x < 70)
+		{
+			passport.setPosition(130, 205);
+			if (passport.sprite.getPosition().x <= 259 - 117 && passportOpened == true)
+			{
+
+				passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
+				passportOpened = false;
+			}
+		}
+		
 		
 		
 
@@ -245,15 +256,16 @@ void Game::mouseMoved(sf::Event event)
 		if (passportPos.x > 259 && passportOpened == false)
 		{
 
-			passport.sprite.scale(1, 2);
+			
 			passport.getImageFromPath("../Data/assets/crossing/UI/passport.png");
 			passportOpened = true;
+			
 		}
 
 
 		else if (passportPos.x <= 259 - 117 && passportOpened == true)
 		{
-			passport.sprite.scale(1, 0.5);
+			
 			passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
 			passportOpened = false;
 		}
