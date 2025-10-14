@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 
+// test change
 int main()
 {
   std::cout << "You should see a window that opens as well as this writing to console..."
