@@ -27,6 +27,7 @@ class Game
 
  private:
 
+	 sf::Text helloText;
 
   GameObject officeBack;
   GameObject background;
@@ -36,8 +37,11 @@ class Game
   GameObject noButton;
   GameObject nextButton;
 
+  bool yesButtonDown = false;
+  bool noButtonDown = false;	
+
   bool yesButtonPressed = false;
-  bool noButtonPressed = false;	
+  bool noButtonPressed = false;
   bool nextButtonPressed = false;	
   bool hover;
   bool pressed = false;
@@ -58,6 +62,7 @@ class Game
   sf::RenderWindow& window;
   sf::Sprite ball;
   sf::Texture ball_texture;
+  sf::Font font;
 
 };
 

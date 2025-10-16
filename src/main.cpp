@@ -12,6 +12,8 @@ int main()
 
   // create window and set up
   sf::RenderWindow window(sf::VideoMode(570, 320), "Critters Crossing");
+  sf::Font font;
+  font.loadFromFile("../Data/Fonts/BMmini.TTF");
 
   sf::Image icon;
   if(icon.loadFromFile("../Data/assets/crossing/critters/frog portrait.png"))

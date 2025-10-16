@@ -21,8 +21,18 @@ Game::~Game()
 
 bool Game::init()
 {
+
+	if (!font.loadFromFile("../Data/Fonts/BMmini.ttf"))
+	{
+		std::cerr << "Error loading font\n";
+		return false;
+	}
+
+
+
 	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 	officeBack.setPosition(0, 0);
+
 	background.getImageFromPath("../Data/assets/crossing/UI/crossing background.png");
 	background.setPosition(0, 0);
 	//yes button
@@ -52,34 +62,35 @@ void Game::update(float dt)
 	
 	if (inMenu == false) 
 	{
-		// track if button has been pressed. changes image temporarily and sets bool to true
-		if (yesButtonPressed)
+		// track if button has been pressed
+		if (yesButtonDown)
 		{
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
 				yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
-				yesButtonPressed = false;
+				yesButtonDown = false;
 				ButtonTimer = 0.0f;
 				
 			}
 		}
 
-		// track if button has been pressed. changes image temporarily and sets bool to true
-		if (noButtonPressed)
+		// track if button has been pressed
+		if (noButtonDown)
 		{
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
 				noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
-				noButtonPressed = false;
+				noButtonDown = false;
 				ButtonTimer = 0.0f;
 			}
 		}
 
-		// track if button has been pressed. changes image temporarily and sets bool to true
+		// track if button has been pressed
 		if (nextButtonPressed)
 		{
+			
 			ButtonTimer += dt;
 			if (ButtonTimer >= ButtonPressedTime)
 			{
@@ -169,8 +180,11 @@ void Game::mouseClicked(sf::Event event)
 		yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
 
 		officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
-		yesButtonPressed = true;
+		yesButtonDown = true;
 		ButtonTimer = 0.0f;
+
+		yesButtonPressed = true;
+
 		
 
 	}
@@ -181,24 +195,32 @@ void Game::mouseClicked(sf::Event event)
 		noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
 
 		officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
-		noButtonPressed = true;
+		noButtonDown = true;
 		ButtonTimer = 0.0f;
 
-		
+		noButtonPressed = true;
 	}
 
-	if (collisionCheck(worldClick, nextButton))
+	// next button should only work if a descision has been made by the player
+	if (collisionCheck(worldClick, nextButton) && (yesButtonPressed || noButtonPressed))	
 	{
-		std::cout << "next button clicked\n";
-		nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
+		
+			std::cout << "next button clicked\n";
+			nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
-		nextButtonPressed = true;
-		ButtonTimer = 0.0f;
+			officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
+			nextButtonPressed = true;
+			ButtonTimer = 0.0f;
 
-		// make critter move left off screen
-		critterMoveLeft = true;
+			// make critter move left off screen
+			critterMoveLeft = true;
 
+			yesButtonPressed = false;
+			noButtonPressed = false;
+	}
+	else if(collisionCheck(worldClick, nextButton))
+	{
+		std::cout << "select [yes / no]\n";
 	}
 
 	if (collisionCheck(worldClick, passport))
@@ -212,13 +234,12 @@ void Game::mouseClicked(sf::Event event)
 }
 bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)
 {
-	// Get sprite bounds and test if click is inside them
+	
 	sf::Sprite* sprite = object.getSprite();
 	sf::FloatRect bounds = sprite->getGlobalBounds();
 	return bounds.contains(static_cast<float>(click.x), static_cast<float>(click.y));
 }
 
-//when mouse pressed check if passport clicked and if so, set it to be dragged until released
 void Game::mousePressed(sf::Event event)
 {
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
@@ -245,7 +266,7 @@ void Game::mouseMoved(sf::Event event)
 		sf::Vector2i pixelPos{ event.mouseMove.x, event.mouseMove.y };
 		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
-		// will pull the object based on mouse position. offset should allow for the passport to not snap
+		// will pull the object based on mouse. offset should allow for the passport to not snap
 		objectDragged->setPosition(worldPos.x - dragOffset.x, (worldPos.y - dragOffset.y - 5));
 
 		std::cout << "drraaaaaagged\n";
