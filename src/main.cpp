@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Game.h"
 #include "GameObject.h"
+#include <windows.h>
 
 
 // test change
@@ -10,10 +11,17 @@ int main()
   std::cout << "You should see a window that opens as well as this writing to console..."
             << std::endl;
 
+  SetProcessDPIAware(); // to stop blurriness on high res screens
+
   // create window and set up
   sf::RenderWindow window(sf::VideoMode(570, 320), "Critters Crossing");
   sf::Font font;
-  font.loadFromFile("../Data/Fonts/BMmini.TTF");
+  font.loadFromFile("../Data/Fonts/PixelifySans-Regular.ttf");
+
+
+  sf::View view(sf::FloatRect(0, 0, window.getSize().x, window.getSize().y));
+  window.setView(view);
+
 
   sf::Image icon;
   if(icon.loadFromFile("../Data/assets/crossing/critters/frog portrait.png"))
