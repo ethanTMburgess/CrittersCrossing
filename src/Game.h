@@ -26,14 +26,21 @@ class Game
 
   int selectCritter();
 
+  void generateDialougeDetails();
+
   void generatePassportDetails();
 
  private:
 
   //Text items for passport
   sf::Text namePPtext;
-  sf::Text datePPtext;
+  sf::Text dayPPtext;
   sf::Text reasonPPtext;
+
+  sf::Text calendarDayText;
+
+  sf::Text nameSpeechText;
+  sf::Text reasonSpeechText;
 
   //sound
 
@@ -69,6 +76,10 @@ class Game
 
   GameObject calendar; 
 
+  GameObject speechBubble;
+ 
+  
+
   bool yesButtonDown = false;
   bool noButtonDown = false;
   bool stampDown = false;
@@ -77,6 +88,8 @@ class Game
   bool noButtonPressed = false;
   bool nextButtonPressed = false;	
   bool stampPressed = false;
+
+  bool critterInPosition = false;
 
   bool hover = false;
   bool pressed = false;
@@ -96,6 +109,9 @@ class Game
   float ButtonTimer = 0.0f;
 
   bool isMale = false;
+
+  bool hasGeneratedDialougeDetails = false;
+  bool hasGeneratedPassportDetails = false;
   
 
   float ButtonPressedTime = 0.2f;
@@ -113,18 +129,35 @@ class Game
   std::string reason;
   std::string day;
 
+  std::string nameDialogue;
+  std::string reasonDialogue;
+
+  std::string reasonPassport;
+
+  std::string newFirstName;
+  std::string newLastName;
+  std::string newReason;
+
+  std::string lastFirstName;
+  std::string lastLastName;
+  std::string lastReason;
+
+  
+
 
   // Storing possible names and reasons for entry
   std::string firstNamesM[3] = { "Fred", "Eliot", "Logan"};
 
   std::string firstNamesF[2] = { "Willow", "Olivia"};
 
-  std::string lastNames[5] = { "Thistledew", "Oakburrow", "Bramblesnout", "Nettlebrook", "WillowTail" };
+  std::string lastNames[5] = { "Thistledew", "Oakburrow", "Bramblesnout", "Nettlebrook", "Fuzztail" };
 
-  std::string reasons[5] = { "trade acorns", "visit the forrest fair", "fix a broken cart wheel", "meet a freind for tea", "meet somebody by the old well" };
+  std::string reasons[5] = { "\ntrade acorns", "\nvisit the forrest fair", "fix \na broken cart wheel", "\nvisit the shops", "\nmeet somebody by the old well" };
+
+  std::string reasonsShort[5] = { "Business", "Tourism", "Work", "Shopping" ,"Scoial",};
 
   // storing all days of the week for the calendar
-  std::string daysOfWeek[7] = { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+  std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 
   GameObject* objectDragged = nullptr;
   sf::Vector2f dragOffset;
