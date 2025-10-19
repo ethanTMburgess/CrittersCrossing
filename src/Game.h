@@ -30,6 +30,8 @@ class Game
 
   void generatePassportDetails();
 
+  void newDay();
+
  private:
 
   //Text items for passport
@@ -75,6 +77,7 @@ class Game
   GameObject noStamp;
 
   GameObject calendar; 
+  sf::Text calendarText;
 
   GameObject speechBubble;
  
@@ -110,9 +113,19 @@ class Game
 
   bool isMale = false;
 
+  //to determine if the critter should be allowed through
+  bool passportValid = false;
+
   bool hasGeneratedDialougeDetails = false;
   bool hasGeneratedPassportDetails = false;
   
+  int crittersSeen = 0;
+  int currentCritter = 0;
+  int currentDay = 6;
+
+  int dayScore = 0;
+
+  int money = 0;
 
   float ButtonPressedTime = 0.2f;
   float stampPressedTime = 0.35f;
@@ -132,7 +145,7 @@ class Game
   std::string nameDialogue;
   std::string reasonDialogue;
 
-  std::string reasonPassport;
+  std::string reasonDialoge;
 
   std::string newFirstName;
   std::string newLastName;
@@ -141,6 +154,11 @@ class Game
   std::string lastFirstName;
   std::string lastLastName;
   std::string lastReason;
+
+  std::string passportFirstName;
+  std::string passportLastName;
+  std::string passportReason;
+  std::string passportDay;
 
   
 
@@ -152,9 +170,15 @@ class Game
 
   std::string lastNames[5] = { "Thistledew", "Oakburrow", "Bramblesnout", "Nettlebrook", "Fuzztail" };
 
-  std::string reasons[5] = { "\ntrade acorns", "\nvisit the forrest fair", "fix \na broken cart wheel", "\nvisit the shops", "\nmeet somebody by the old well" };
+  std::string reasons[5] = { "\ntrade acorns", "\nvisit the forest fair", "fix \na broken cart wheel", "\nvisit the shops", "\nmeet somebody by the old well" };
 
-  std::string reasonsShort[5] = { "Business", "Tourism", "Work", "Shopping" ,"Scoial",};
+  std::string reasonsShort[5] = { "Business", "Tourism", "Work", "Shopping" ,"Social",};
+
+  std::string passportPhotos[5] = { "../Data/assets/crossing/critters/frog passport image.png",
+								   "../Data/assets/crossing/critters/mouse passport image.png",
+								   "../Data/assets/crossing/critters/duck passport image.png",
+								   "../Data/assets/crossing/critters/racoon passport image.png",
+								   "../Data/assets/crossing/critters/rabbit passport image.png" };
 
   // storing all days of the week for the calendar
   std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };

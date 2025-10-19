@@ -97,6 +97,8 @@ bool Game::init()
 	dayPPtext.setFillColor(sf::Color(55, 55, 55));	
 	dayPPtext.setPosition(10, 10);
 
+	
+
 	nameSpeechText.setFont(font);
 	nameSpeechText.setString(nameDialogue);
 	nameSpeechText.setCharacterSize(10);
@@ -116,6 +118,12 @@ bool Game::init()
 
 	calendar.getImageFromPath("../Data/assets/crossing/UI/calendar.png");
 	calendar.setPosition(283, 79);
+
+	calendarText.setFont(font);
+	calendarText.setString(daysOfWeek[currentDay]);
+	calendarText.setCharacterSize(15);
+	calendarText.setFillColor(sf::Color(55, 55, 55));
+	calendarText.setPosition(calendar.sprite.getPosition().x + 13, calendar.sprite.getPosition().y + 3);
 
 	
 
@@ -247,7 +255,7 @@ void Game::update(float dt)
 			}
 		}
 
-		passportPhoto.setPosition(passport.sprite.getPosition().x + 66, passport.sprite.getPosition().y + 5);
+		passportPhoto.setPosition(passport.sprite.getPosition().x + 67, passport.sprite.getPosition().y + 5);
 
 		namePPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 3);
 		reasonPPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 30);
@@ -342,8 +350,11 @@ void Game::update(float dt)
 		}
 
 
+		
+
 		nameSpeechText.setString(nameDialogue);
 		reasonSpeechText.setString(reasonDialogue);
+		calendarText.setString(daysOfWeek[currentDay]);
 		
 		
 		
@@ -368,6 +379,7 @@ void Game::render()
 	nextButton.render(window);
 
 	calendar.render(window);
+	window.draw(calendarText);
 
 	if (critterInPosition)
 	{
@@ -475,6 +487,32 @@ void Game::mouseClicked(sf::Event event)
 			nextButtonPressed = true;
 			ButtonTimer = 0.0f;
 
+			if(noButtonPressed && passportValid)
+			{
+				std::cout << "passport was valid but denied\n";
+				dayScore = dayScore - 1;
+			}
+
+			if(noButtonPressed && !passportValid)
+			{
+				std::cout << "passport was invalid and denied\n";
+				dayScore = dayScore + 1;
+			}
+
+			if(yesButtonPressed && !passportValid)
+			{
+				std::cout << "passport was invalid but allowed\n";
+				dayScore = dayScore - 1;
+			}
+
+			if(yesButtonPressed && passportValid)
+			{
+				std::cout << "passport was valid and allowed\n";
+				dayScore = dayScore + 1;
+			}
+			
+			
+
 			buttonPressSound.play();
 
 			// make critter move left off screen
@@ -491,6 +529,9 @@ void Game::mouseClicked(sf::Event event)
 			hasGeneratedPassportDetails = false;
 
 			critterInPosition = false;
+
+			crittersSeen = crittersSeen + 1;
+
 
 	}
 	else if(collisionCheck(worldClick, nextButton))
@@ -639,12 +680,20 @@ void Game::mouseReleased(sf::Event event)
 }
 
 int Game::selectCritter() {
+
+	if (crittersSeen >= 5)
+	{
+		newDay();
+	}
+
 	int chosenCritter = rand() % 5 + 1;
+	currentCritter = chosenCritter;
 
 	// Spawns frog
 	if (chosenCritter == 1)
 	{
 		critter.getImageFromPath("../Data/assets/crossing/critters/frog portrait.png");
+		
 		isMale = true;
 		firstName = "Fred";
 		lastName = "Hopperton";
@@ -655,6 +704,7 @@ int Game::selectCritter() {
 	else if (chosenCritter == 2)
 	{
 		critter.getImageFromPath("../Data/assets/crossing/critters/mouse portrait.png");
+		
 		isMale = true;
 		firstName = "Stuart";
 		lastName = "Whiskerfield";
@@ -665,9 +715,10 @@ int Game::selectCritter() {
 	else if (chosenCritter == 3)
 	{
 		critter.getImageFromPath("../Data/assets/crossing/critters/duck portrait.png");
+		
 		isMale = true;
 		firstName = "Quincy";
-		lastName = "Featherstone";
+		lastName = "Featherson";
 		
 	}
 
@@ -675,6 +726,7 @@ int Game::selectCritter() {
 	else if (chosenCritter == 4)
 	{
 		critter.getImageFromPath("../Data/assets/crossing/critters/racoon portrait.png");
+		
 		isMale = false;
 		firstName = "Luna";
 		lastName = "Snuffleson";
@@ -684,12 +736,15 @@ int Game::selectCritter() {
 	//spawns rabbit
 	else if (chosenCritter == 5)
 	{
-		critter.getImageFromPath("../Data/assets/crossing/critters/racoon portrait.png");
+		critter.getImageFromPath("../Data/assets/crossing/critters/rabbit portrait.png");
+		
 		isMale = false;
 		firstName = "Willow";
 		lastName = "Cottontail";
 		
 	}
+
+	passportPhoto.getImageFromPath(passportPhotos[chosenCritter - 1]);
 
 	if (!hasGeneratedDialougeDetails)
 	{
@@ -708,65 +763,19 @@ int Game::selectCritter() {
 
 void Game::generateDialougeDetails()
 {
-
-	// Generate first name based on gender of critter
-
-	/*
-	if (isMale)
-	{
-		int selectFirstName = rand() % 3;
-		newFirstName = firstNamesM[selectFirstName];
-
-		while(newFirstName == lastFirstName)
-		{
-			int selectFirstName = rand() % 3;
-			newFirstName = firstNamesM[selectFirstName];
-		}
-		
-	}
-	else
-	{
-		int SelectFirstName = rand() % 2;
-		newFirstName = firstNamesF[SelectFirstName];
-
-		while(newFirstName == lastFirstName)
-		{
-			int SelectFirstName = rand() % 2;
-			newFirstName = firstNamesF[SelectFirstName];
-		}
-		
-	}
-	
-	
-	
-	// generate last name
-	int SelectlastName = rand() % 5;
-	newLastName = lastNames[SelectlastName];
-
-	
-
-	while (newLastName == lastLastName)
-	{
-		int SelectlastName = rand() % 5;
-		newLastName = lastNames[SelectlastName];
-	}
-	*/
-
 	
 	// generate reason for entry
 	int selectReason = rand() % 5;
 	newReason = reasons[selectReason];
-	reasonPassport = reasonsShort[selectReason];
+	reasonDialoge = reasonsShort[selectReason];
 
 	while (newReason == lastReason)
 	{
-		int SelectReason = rand() % 5;
-		newReason = reasons[SelectReason];
+		int selectReason = rand() % 5;
+		newReason = reasons[selectReason];
 	}
 
-	// generate day of the week
-	int SelectDay = rand() % 7 ;
-	day = daysOfWeek[SelectDay];
+	
 
 	
 	reason = newReason;
@@ -782,43 +791,145 @@ void Game::generateDialougeDetails()
 	std::cout << reasonDialogue << std::endl;
 }
 
-void Game:: generatePassportDetails()
+void Game::generatePassportDetails()
 {
 	int missmatchChance = rand() % 8;
 
-	//changes name on passport to be incorrect
-	if (missmatchChance == 1) 
+	passportFirstName = firstName;
+	passportLastName = lastName;
+	passportReason = reasonDialoge;
+	passportDay = daysOfWeek[currentDay];
+	
+
+
+	// Changes name on passport to be incorrect
+	if (missmatchChance == 1)
 	{
-		namePPtext.setString("Incorrect Name");
+		std::cout << "------------------\nname mismatch\n";
+
+		if (isMale)
+		{
+			int selectFirstName = rand() % 3;
+			passportFirstName = firstNamesM[selectFirstName];
+
+			while (passportFirstName == firstName) 
+			{
+				selectFirstName = rand() % 3;
+				passportFirstName = firstNamesM[selectFirstName];
+			}
+		}
+		else
+		{
+			int selectFirstName = rand() % 2;
+			passportFirstName = firstNamesF[selectFirstName];
+
+			while (passportFirstName == firstName)
+			{
+				selectFirstName = rand() % 2;
+				passportFirstName = firstNamesF[selectFirstName];
+			}
+		}
+
+		int selectLastName = rand() % 5;
+		passportLastName = lastNames[selectLastName];
+
+		while (passportLastName == lastName)
+		{
+			selectLastName = rand() % 5;
+			passportLastName = lastNames[selectLastName];
+		}
+
+		passportValid = false;
 	}
 
-	//changes reason on passport to be incorrect
-	if(missmatchChance == 2)
+	// Changes reason on passport to be incorrect
+	else if (missmatchChance == 2)
 	{
-		reasonPPtext.setString("Incorrect Reason");
+		std::cout << "-------------------\nreason mismatch - DENY\n";
+
+		int selectReason = rand() % 5;
+		passportReason = reasonsShort[selectReason];
+
+		while (passportReason == reasonDialoge)  
+		{
+			selectReason = rand() % 5;
+			passportReason = reasonsShort[selectReason];
+		}
+
+		passportValid = false;
 	}
 
-	//changes day on passport to be incorrect
-	if(missmatchChance == 3)
+	// Changes day on passport to be incorrect
+	else if (missmatchChance == 3)
 	{
-		dayPPtext.setString("Incorrect Day");
+		std::cout << "--------------------\nday mismatch - DENY\n";
+
+		int selectDay = rand() % 7;
+		passportDay = daysOfWeek[selectDay];
+
+		while (passportDay == daysOfWeek[currentDay])
+		{
+			selectDay = rand() % 7;
+			passportDay = daysOfWeek[selectDay];
+		}
+
+		passportValid = false;
 	}
 
-	// changes photo on the passport to be incorrect
-	if(missmatchChance == 4)
+	// Changes photo on the passport to be incorrect
+	else if (missmatchChance == 4)
 	{
-		std::cout << "photo mismatch\n";
-	}
-	else if (missmatchChance > 4)
-	{
+		{
+			std::cout << "--------------------\nphoto mismatch - DENY\n";
 
-		namePPtext.setString(firstName + "\n" + lastName);
-		reasonPPtext.setString(reasonPassport);
-		dayPPtext.setString(day);
+			int selectPhoto = rand() % 5;
+
+			
+			while (selectPhoto == (currentCritter - 1))
+			{
+				selectPhoto = rand() % 5;
+			}
+
+			passportPhoto.getImageFromPath(passportPhotos[selectPhoto]);
+		}
+
+		passportValid = false;
+
+	}
+
+	// if no problems are generated, the critter should be accepted
+	else
+	{
+		std::cout << "--------------------\nAll correct - APPROVE\n";
+
+		passportDay = daysOfWeek[currentDay];
+
+		passportValid = true;
 
 	}
 
 	
+	namePPtext.setString(passportFirstName + "\n" + passportLastName);
+	reasonPPtext.setString(passportReason);
+	dayPPtext.setString(passportDay);
+}
+
+void Game::newDay()
+{
+	crittersSeen = 0;
+
+	// adds a new day, loops back to 0 after sunday
+	if(currentDay < 6)
+	{
+		std::cout << "--------------------\nNew Day!\n";
+		currentDay ++;
+	}
+	else
+	{
+		currentDay = 0;
+	}
+	money = money + dayScore * 5;
+	std::cout << "------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n------------\n\n" << std::endl;
 }
 
 
