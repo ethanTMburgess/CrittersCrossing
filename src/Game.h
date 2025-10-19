@@ -9,6 +9,14 @@
 #include <cmath>
 #include <SFML/Audio.hpp>
 
+
+enum class GameState
+{
+	MENU,
+	PLAYING,
+	DAYEND
+};
+
 class Game
 {
  public:
@@ -16,7 +24,15 @@ class Game
   ~Game();
   bool init();
   void update(float dt);
+  void updateMenu(float dt);
+  void updatePlaying(float dt);
+  void updateDayEnd(float dt);
+
   void render();
+  void renderMenu();
+  void renderPlaying();
+  void renderDayEnd();
+
   void mouseClicked(sf::Event event);
   bool collisionCheck(const sf::Vector2f& click, GameObject& object);
   void keyPressed(sf::Event event);
@@ -34,6 +50,10 @@ class Game
 
  private:
 
+	 GameState currentState;
+	
+
+	
   //Text items for passport
   sf::Text namePPtext;
   sf::Text dayPPtext;
@@ -80,6 +100,10 @@ class Game
   sf::Text calendarText;
 
   GameObject speechBubble;
+
+
+  GameObject dayEndBack;
+  GameObject nextDayButton;
  
   
 
@@ -121,7 +145,9 @@ class Game
   
   int crittersSeen = 0;
   int currentCritter = 0;
-  int currentDay = 6;
+  int currentDay = 0;
+
+  int crittersPerDay = 1;
 
   int dayScore = 0;
 
