@@ -26,7 +26,6 @@ bool Game::init()
 	currentState = GameState::PLAYING;
 
 
-
 	if (!font.loadFromFile("../Data/Fonts/PixelifySans-Bold.ttf"))
 	{
 		std::cerr << "Error loading font\n";
@@ -156,8 +155,7 @@ bool Game::init()
 
 
 
-	sf::Texture& fontTexture = const_cast<sf::Texture&>(font.getTexture(namePPtext.getCharacterSize()));
-	fontTexture.setSmooth(false);
+	
 
 
 	selectCritter();
@@ -232,6 +230,9 @@ void Game::render()
 
 }
 
+
+
+
 void Game::mouseClicked(sf::Event event)
 {
 	//get the click position
@@ -260,7 +261,7 @@ void Game::mouseClicked(sf::Event event)
 
 	if (collisionCheck(worldClick, nextDayButton))
 	{
-		GameState::PLAYING;
+		currentState = GameState::PLAYING;
 	}
 
 	if (collisionCheck(worldClick, noButton))
@@ -299,19 +300,19 @@ void Game::mouseClicked(sf::Event event)
 			dayScore = dayScore - 1;
 		}
 
-		if (noButtonPressed && !passportValid)
+		else if (noButtonPressed && !passportValid)
 		{
 			std::cout << "passport was invalid and denied\n";
 			dayScore = dayScore + 1;
 		}
 
-		if (yesButtonPressed && !passportValid)
+		else if (yesButtonPressed && !passportValid)
 		{
 			std::cout << "passport was invalid but allowed\n";
 			dayScore = dayScore - 1;
 		}
 
-		if (yesButtonPressed && passportValid)
+		else if (yesButtonPressed && passportValid)
 		{
 			std::cout << "passport was valid and allowed\n";
 			dayScore = dayScore + 1;
@@ -739,6 +740,7 @@ void Game::newDay()
 	money = money + dayScore * 5;
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
 
+
 	
 }
 
@@ -756,6 +758,8 @@ void Game :: renderMenu()
 void Game::renderPlaying()
 {
 
+
+	
 	// office back shows behind the main game backgroudnd
 	officeBack.render(window);
 
@@ -840,6 +844,10 @@ void Game::updateMenu(float dt)
 
 void Game::updatePlaying(float dt)
 {
+
+	sf::Texture& fontTexture = const_cast<sf::Texture&>(font.getTexture(namePPtext.getCharacterSize()));
+	fontTexture.setSmooth(false);
+
 	// track if button has been pressed
 	if (yesButtonDown)
 	{
