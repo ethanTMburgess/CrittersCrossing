@@ -8,6 +8,79 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
+/*
+1. Passport Class
+Handles all passport-related data and validation logic:
+
+Passport details (name, reason, day, photo)
+Validation logic (currently in generatePassportDetails())
+Open/closed state
+Text rendering positions
+Stamp application
+
+2. Critter Class
+Manages individual critter data and behavior:
+
+Critter type/ID
+Movement logic
+Position and animation states
+Name and gender
+Dialogue generation
+Portrait/photo paths
+
+3. UIManager Class
+Consolidates all UI elements:
+
+Buttons (yes, no, next)
+Calendar
+Speech bubble
+Background elements
+Button press states and timers
+
+4. StampManager Class
+Handles stamp-related functionality:
+
+Stamp movement (slide in/out)
+Stamp application logic
+Yes/No stamp visibility
+Tab interaction
+Position calculations
+
+5. AudioManager Class
+Centralizes all audio:
+
+Sound effects (button press, stamp)
+Background music
+Volume control
+Loading and playing sounds
+
+6. GameStateManager Class
+Manages state transitions and state-specific logic:
+
+Current state tracking
+State transition logic
+Day progression
+Score tracking
+Money management
+
+7. TextManager/UIText Class
+Handles text rendering:
+
+Font management
+Text positioning
+Text updates
+Character size and color settings
+
+8. DataManager Class
+Stores and manages game data:
+
+Name arrays (first names, last names)
+Reason arrays
+Days of week
+Passport photo paths
+Random generation utilities
+*/
+
 
 Game::Game(sf::RenderWindow& game_window)
 	: window(game_window)
