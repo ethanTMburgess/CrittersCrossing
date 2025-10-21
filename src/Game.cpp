@@ -1,96 +1,38 @@
-
-#include "Game.h"
-#include "GameObject.h"
-#include "Vector2.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-/*
-1. Passport Class
-Handles all passport-related data and validation logic:
 
-Passport details (name, reason, day, photo)
-Validation logic (currently in generatePassportDetails())
-Open/closed state
-Text rendering positions
-Stamp application
+#include "Game.h"
+#include "GameObject.h"
+#include "Vector2.h"
 
-2. Critter Class
-Manages individual critter data and behavior:
+#include "UImanager.h"
 
-Critter type/ID
-Movement logic
-Position and animation states
-Name and gender
-Dialogue generation
-Portrait/photo paths
+#include "PlayingState.h"
+#include "MenuState.h"
+#include "DayEndState.h"
 
-3. UIManager Class
-Consolidates all UI elements:
+#include "GameStateManager.h"
 
-Buttons (yes, no, next)
-Calendar
-Speech bubble
-Background elements
-Button press states and timers
 
-4. StampManager Class
-Handles stamp-related functionality:
 
-Stamp movement (slide in/out)
-Stamp application logic
-Yes/No stamp visibility
-Tab interaction
-Position calculations
 
-5. AudioManager Class
-Centralizes all audio:
-
-Sound effects (button press, stamp)
-Background music
-Volume control
-Loading and playing sounds
-
-6. GameStateManager Class
-Manages state transitions and state-specific logic:
-
-Current state tracking
-State transition logic
-Day progression
-Score tracking
-Money management
-
-7. TextManager/UIText Class
-Handles text rendering:
-
-Font management
-Text positioning
-Text updates
-Character size and color settings
-
-8. DataManager Class
-Stores and manages game data:
-
-Name arrays (first names, last names)
-Reason arrays
-Days of week
-Passport photo paths
-Random generation utilities
-*/
 
 
 Game::Game(sf::RenderWindow& game_window)
 	: window(game_window)
 {
 	srand(time(NULL));
+	uiManager = new UImanager();
+
 }
 
 Game::~Game()
 {
-
+	delete uiManager;
 }
 
 bool Game::init()
@@ -106,8 +48,9 @@ bool Game::init()
 	}
 
 
+	UImanager* mouseClicked();
 
-
+	
 
 
 
@@ -119,14 +62,14 @@ bool Game::init()
 	background.getImageFromPath("../Data/assets/crossing/UI/crossing background.png");
 	background.setPosition(0, 0);
 	//yes button
-	yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
-	yesButton.setPosition(290 - 5, 20);
+	uiManager->yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
+	uiManager->yesButton.setPosition(290 - 5, 20);
 	//no button
-	noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
-	noButton.setPosition(390 - 15, 20);
+	uiManager->noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
+	uiManager->noButton.setPosition(390 - 15, 20);
 	//next button
-	nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
-	nextButton.setPosition(490 - 10, 20);
+	uiManager->nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
+	uiManager->nextButton.setPosition(490 - 10, 20);
 
 	//passport
 	passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
@@ -134,18 +77,18 @@ bool Game::init()
 	passportPhoto.getImageFromPath("../Data/assets/crossing/critters/frog passport photo.png");
 
 
-	stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
-	stamp.setPosition(570, 90);
+	uiManager->stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
+	uiManager->stamp.setPosition(570, 90);
 
-	stampTab.getImageFromPath("../Data/assets/crossing/UI/stamp tab.png");
-	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
+	uiManager->stampTab.getImageFromPath("../Data/assets/crossing/UI/stamp tab.png");
+	uiManager->stampTab.setPosition(uiManager->stamp.sprite.getPosition().x - 15, uiManager->stamp.sprite.getPosition().y + 32);
 
-	stampShadow.getImageFromPath("../Data/assets/crossing/UI/stamp shadow.png");
-	stampShadow.setPosition(stamp.sprite.getPosition().x, stamp.sprite.getPosition().y + 70);
+	uiManager->stampShadow.getImageFromPath("../Data/assets/crossing/UI/stamp shadow.png");
+	uiManager->stampShadow.setPosition(uiManager->stamp.sprite.getPosition().x, uiManager->stamp.sprite.getPosition().y + 70);
 
-	yesStamp.getImageFromPath("../Data/assets/crossing/UI/yes stamp.png");
+	uiManager->yesStamp.getImageFromPath("../Data/assets/crossing/UI/yes stamp.png");
 
-	noStamp.getImageFromPath("../Data/assets/crossing/UI/no stamp.png");
+	uiManager->noStamp.getImageFromPath("../Data/assets/crossing/UI/no stamp.png");
 
 
 	speechBubble.getImageFromPath("../Data/assets/crossing/UI/speech bubble.png");
@@ -189,8 +132,8 @@ bool Game::init()
 
 
 
-	yesStamp.setVisible(false);
-	noStamp.setVisible(false);
+	uiManager->yesStamp.setVisible(false);
+	uiManager->noStamp.setVisible(false);
 
 	calendar.getImageFromPath("../Data/assets/crossing/UI/calendar.png");
 	calendar.setPosition(283, 79);
@@ -228,13 +171,13 @@ bool Game::init()
 
 
 
-	
+
 
 
 	selectCritter();
 
 	critter.setPosition(78 - 178, 97);
-	sf::Vector2f stampBasePosition = stamp.sprite.getPosition();
+	sf::Vector2f stampBasePosition = uiManager->stamp.sprite.getPosition();
 
 
 	dayEndBack.getImageFromPath("../data/assets/crossing/UI/day end screen.png");
@@ -247,7 +190,7 @@ bool Game::init()
 	return true;
 
 
-	
+
 }
 
 void Game::update(float dt)
@@ -277,195 +220,36 @@ void Game::update(float dt)
 
 void Game::render()
 {
-	
-	
 
-	switch (currentState)
-	{
-		case GameState::MENU:
-			renderMenu();
-			break;
 
-		case GameState::PLAYING:
-			renderPlaying();
-			break;
+	
+		switch (currentState)
+		{
+			case GameState::MENU:
+				renderMenu();
+				break;
 
-		case GameState::DAYEND:
-			renderDayEnd();
-			break;
+			case GameState::PLAYING:
+				renderPlaying();
+				break;
 
-	}
-	
-	
-	
-	
-	
+			case GameState::DAYEND:
+				renderDayEnd();
+				break;
+
+		}
+		
+
+
+
+
 
 }
 
 
 
 
-void Game::mouseClicked(sf::Event event)
-{
-	//get the click position
-	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
-	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
-	if (collisionCheck(worldClick, yesButton))
-	{
-
-		std::cout << "yes button clicked\n";
-		yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
-
-		buttonPressSound.play();
-
-		yesButtonDown = true;
-		ButtonTimer = 0.0f;
-
-		yesButtonPressed = true;
-
-		noButtonPressed = false;
-
-
-	}
-
-	if (collisionCheck(worldClick, nextDayButton))
-	{
-		currentState = GameState::PLAYING;
-	}
-
-	if (collisionCheck(worldClick, noButton))
-	{
-		std::cout << "no button clicked\n";
-		noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
-
-		buttonPressSound.play();
-
-		noButtonDown = true;
-		ButtonTimer = 0.0f;
-
-		noButtonPressed = true;
-		yesButtonPressed = false;
-	}
-
-
-	// next button should only work if a descision has been made by the player
-
-	sf::Vector2f passportPos = passport.sprite.getPosition();
-	if (collisionCheck(worldClick, nextButton) && (yesButtonPressed || noButtonPressed) && stampPressed && passportPos.x < 139)
-	{
-
-		std::cout << "next button clicked\n";
-		nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
-		nextButtonPressed = true;
-		ButtonTimer = 0.0f;
-
-		if (noButtonPressed && passportValid)
-		{
-			std::cout << "passport was valid but denied\n";
-			dayScore = dayScore - 1;
-		}
-
-		else if (noButtonPressed && !passportValid)
-		{
-			std::cout << "passport was invalid and denied\n";
-			dayScore = dayScore + 1;
-		}
-
-		else if (yesButtonPressed && !passportValid)
-		{
-			std::cout << "passport was invalid but allowed\n";
-			dayScore = dayScore - 1;
-		}
-
-		else if (yesButtonPressed && passportValid)
-		{
-			std::cout << "passport was valid and allowed\n";
-			dayScore = dayScore + 1;
-		}
-
-
-
-		buttonPressSound.play();
-
-		// make critter move left off screen
-		critterMoveLeft = true;
-
-		yesButtonPressed = false;
-		noButtonPressed = false;
-		stampPressed = false;
-
-		yesStampApplied = false;
-		noStampApplied = false;
-
-		hasGeneratedDialougeDetails = false;
-		hasGeneratedPassportDetails = false;
-
-		critterInPosition = false;
-
-		crittersSeen = crittersSeen + 1;
-
-
-	}
-	else if (collisionCheck(worldClick, nextButton))
-	{
-		std::cout << "select [yes / no]\n";
-	}
-
-	if (collisionCheck(worldClick, passport))
-	{
-		std::cout << "passport clicked\n";
-		hover = true;
-
-	}
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (collisionCheck(worldClick, stampTab) && stampShowing == false)
-	{
-		std::cout << "stamp tab clicked\n";
-		stampMoveLeft = true;
-
-		stampMoveRight = false;
-
-		stampShowing = true;
-
-
-	}
-
-	else if (collisionCheck(worldClick, stampTab) && stampShowing == true)
-	{
-		std::cout << "stamp tab clicked\n";
-
-		stampMoveLeft = false;
-
-		stampMoveRight = true;
-
-		stampShowing = false;
-
-
-
-	}
-
-	if (collisionCheck(worldClick, stamp) && stampShowing == true && (yesButtonPressed || noButtonPressed))
-	{
-		stampDown = true;
-		std::cout << "stamp clicked\n";
-		stamp.getImageFromPath("../Data/assets/crossing/UI/stamp pressed.png");
-		ButtonTimer = 0.0f;
-
-		stampSound.play();
-	}
-
-
-}
 
 bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)
 {
@@ -814,7 +598,7 @@ void Game::newDay()
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
 
 
-	
+
 }
 
 
@@ -823,16 +607,16 @@ void Game::newDay()
 
 
 
-void Game :: renderMenu()
+void Game::renderMenu()
 {
-	
+
 }
 
 void Game::renderPlaying()
 {
 
 
-	
+
 	// office back shows behind the main game backgroudnd
 	officeBack.render(window);
 
@@ -842,9 +626,9 @@ void Game::renderPlaying()
 	background.render(window);
 
 	// buttons render
-	yesButton.render(window);
-	noButton.render(window);
-	nextButton.render(window);
+	uiManager->yesButton.render(window);
+	uiManager->noButton.render(window);
+	uiManager->nextButton.render(window);
 
 	calendar.render(window);
 	window.draw(calendarText);
@@ -868,15 +652,15 @@ void Game::renderPlaying()
 			window.draw(reasonPPtext);
 			window.draw(dayPPtext);
 
-			if (yesStampApplied)
+			if (uiManager->yesStampApplied)
 			{
 
-				yesStamp.render(window);
+				uiManager->yesStamp.render(window);
 
 			}
-			if (noStampApplied)
+			if (uiManager->noStampApplied)
 			{
-				noStamp.render(window);
+				uiManager->noStamp.render(window);
 			}
 
 		}
@@ -888,9 +672,9 @@ void Game::renderPlaying()
 	// passport, photo, and deta render
 
 
-	stampShadow.render(window);
-	stamp.render(window);
-	stampTab.render(window);
+	uiManager->stampShadow.render(window);
+	uiManager->stamp.render(window);
+	uiManager->stampTab.render(window);
 
 
 
@@ -911,7 +695,7 @@ void Game::updateMenu(float dt)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 	{
 		std::cout << "Starting game..." << std::endl;
-		currentState = GameState::PLAYING;
+
 	}
 }
 
@@ -922,40 +706,40 @@ void Game::updatePlaying(float dt)
 	fontTexture.setSmooth(false);
 
 	// track if button has been pressed
-	if (yesButtonDown)
+	if (uiManager->yesButtonDown)
 	{
-		ButtonTimer += dt;
-		if (ButtonTimer >= ButtonPressedTime)
+		uiManager->ButtonTimer += dt;
+		if (uiManager->ButtonTimer >= ButtonPressedTime)
 		{
-			yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
-			yesButtonDown = false;
-			ButtonTimer = 0.0f;
+			uiManager->yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
+			uiManager->yesButtonDown = false;
+			uiManager->ButtonTimer = 0.0f;
 
 		}
 	}
 
 	// track if button has been pressed
-	if (noButtonDown)
+	if (uiManager->noButtonDown)
 	{
-		ButtonTimer += dt;
-		if (ButtonTimer >= ButtonPressedTime)
+		uiManager->ButtonTimer += dt;
+		if (uiManager->ButtonTimer >= ButtonPressedTime)
 		{
-			noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
-			noButtonDown = false;
-			ButtonTimer = 0.0f;
+			uiManager->noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
+			uiManager->noButtonDown = false;
+			uiManager->ButtonTimer = 0.0f;
 		}
 	}
 
 	// track if button has been pressed
-	if (nextButtonPressed)
+	if (uiManager->nextButtonPressed)
 	{
 
-		ButtonTimer += dt;
-		if (ButtonTimer >= ButtonPressedTime)
+		uiManager->ButtonTimer += dt;
+		if (uiManager->ButtonTimer >= ButtonPressedTime)
 		{
-			nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
-			nextButtonPressed = false;
-			ButtonTimer = 0.0f;
+			uiManager->nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
+			uiManager->nextButtonPressed = false;
+			uiManager->ButtonTimer = 0.0f;
 			stampMoveRight = true;
 
 		}
@@ -1001,12 +785,12 @@ void Game::updatePlaying(float dt)
 		// stop when completely off the left side of the screen
 		if (critter.sprite.getPosition().x + critter.sprite.getGlobalBounds().width < 0.0f)
 		{
-			
+
 
 			if (crittersSeen >= crittersPerDay)
 			{
 				std::cout << "game state changed\n";
-				currentState = GameState::DAYEND;
+
 			}
 			else
 			{
@@ -1014,7 +798,7 @@ void Game::updatePlaying(float dt)
 				critterMoveLeft = false;
 
 			}
-			
+
 		}
 	}
 
@@ -1024,18 +808,18 @@ void Game::updatePlaying(float dt)
 	reasonPPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 30);
 	dayPPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 45);
 
-	yesStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
-	noStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
+	uiManager->yesStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
+	uiManager->noStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
 
 	if (stampMoveLeft)
 	{
-		stamp.setVector(-1, 0);
-		stamp.setSpeed(stampSpeed);
-		stamp.move(stamp.getVector()->x * stamp.getSpeed(), stamp.getVector()->y * stamp.getSpeed());
+		uiManager->stamp.setVector(-1, 0);
+		uiManager->stamp.setSpeed(stampSpeed);
+		uiManager->stamp.move(uiManager->stamp.getVector()->x * uiManager->stamp.getSpeed(), uiManager->stamp.getVector()->y * uiManager->stamp.getSpeed());
 
-		if (stamp.sprite.getPosition().x <= stampVisible)
+		if (uiManager->stamp.sprite.getPosition().x <= stampVisible)
 		{
-			stamp.setPosition(stampVisible, 90);
+			uiManager->stamp.setPosition(stampVisible, 90);
 			stampMoveLeft = false;
 			stampShowing = true;
 		}
@@ -1043,32 +827,32 @@ void Game::updatePlaying(float dt)
 
 	if (stampMoveRight)
 	{
-		stamp.setVector(1, 0);
-		stamp.setSpeed(stampSpeed);
-		stamp.move(stamp.getVector()->x * stamp.getSpeed(), stamp.getVector()->y * stamp.getSpeed());
+		uiManager->stamp.setVector(1, 0);
+		uiManager->stamp.setSpeed(stampSpeed);
+		uiManager->stamp.move(uiManager->stamp.getVector()->x * uiManager->stamp.getSpeed(), uiManager->stamp.getVector()->y * uiManager->stamp.getSpeed());
 
-		if (stamp.sprite.getPosition().x >= stampHidden)
+		if (uiManager->stamp.sprite.getPosition().x >= stampHidden)
 		{
-			stamp.setPosition(stampHidden, 90);
+			uiManager->stamp.setPosition(stampHidden, 90);
 			stampMoveLeft = false;
 			stampShowing = false;
 		}
 
 	}
 
-	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
-	stampShadow.setPosition(stamp.sprite.getPosition().x, stamp.sprite.getPosition().y + 70);
+	uiManager->stampTab.setPosition(uiManager->stamp.sprite.getPosition().x - 15, uiManager->stamp.sprite.getPosition().y + 32);
+	uiManager->stampShadow.setPosition(uiManager->stamp.sprite.getPosition().x, uiManager->stamp.sprite.getPosition().y + 70);
 
 
-	float distanceX = stamp.sprite.getPosition().x - passport.sprite.getPosition().x;
-	float distanceY = stamp.sprite.getPosition().y - passport.sprite.getPosition().y;
+	float distanceX = uiManager->stamp.sprite.getPosition().x - passport.sprite.getPosition().x;
+	float distanceY = uiManager->stamp.sprite.getPosition().y - passport.sprite.getPosition().y;
 
 	float toloranceX = 50.f;
 	float toloranceY = 50.f;
 
 	sf::Vector2f stampCenter(
-		stamp.sprite.getPosition().x + stamp.sprite.getGlobalBounds().width / 2.f,
-		stamp.sprite.getPosition().y + stamp.sprite.getGlobalBounds().height / 2.f
+		uiManager->stamp.sprite.getPosition().x + uiManager->stamp.sprite.getGlobalBounds().width / 2.f,
+		uiManager->stamp.sprite.getPosition().y + uiManager->stamp.sprite.getGlobalBounds().height / 2.f
 	);
 
 	sf::Vector2f passportCenter(
@@ -1076,47 +860,47 @@ void Game::updatePlaying(float dt)
 		passport.sprite.getPosition().y + passport.sprite.getGlobalBounds().height / 2.f
 	);
 
-	sf::FloatRect stampBounds = stamp.sprite.getGlobalBounds();
+	sf::FloatRect stampBounds = uiManager->stamp.sprite.getGlobalBounds();
 	bool passportCenterInStamp = stampBounds.contains(passportCenter);
 
 
-	if (stampDown && passportCenterInStamp && !stampPressed)
+	if (uiManager->stampDown && passportCenterInStamp && !uiManager->stampPressed)
 	{
-		if (yesButtonPressed)
+		if (uiManager->yesButtonPressed)
 		{
-			yesStamp.setVisible(true);
-			noStamp.setVisible(false);
-			stampPressed = true;
-			yesStampApplied = true;
-			noStampApplied = false;
+			uiManager->yesStamp.setVisible(true);
+			uiManager->noStamp.setVisible(false);
+			uiManager->stampPressed = true;
+			uiManager->yesStampApplied = true;
+			uiManager->noStampApplied = false;
 		}
-		else if (noButtonPressed)
+		else if (uiManager->noButtonPressed)
 		{
-			noStamp.setVisible(true);
-			yesStamp.setVisible(false);
-			stampPressed = true;
-			noStampApplied = true;
-			yesStampApplied = false;
+			uiManager->noStamp.setVisible(true);
+			uiManager->yesStamp.setVisible(false);
+			uiManager->stampPressed = true;
+			uiManager->noStampApplied = true;
+			uiManager->yesStampApplied = false;
 		}
 	}
 
-	if (stampDown)
+	if (uiManager->stampDown)
 	{
-		ButtonTimer += dt;
-		if (ButtonTimer >= stampPressedTime)
+		uiManager->ButtonTimer += dt;
+		if (uiManager->ButtonTimer >= stampPressedTime)
 		{
-			stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
-			stampDown = false;
-			ButtonTimer = 0.0f;
+			uiManager->stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
+			uiManager->stampDown = false;
+			uiManager->ButtonTimer = 0.0f;
 
 		}
 	}
 
 
-	
-		
-		
-	
+
+
+
+
 
 	nameSpeechText.setString(nameDialogue);
 	reasonSpeechText.setString(reasonDialogue);
@@ -1131,18 +915,18 @@ void Game::updateDayEnd(float dt)
 {
 	static float timer = 0.0f;
 
-	
 
-	
-		std::cout << "Day End! Preparing next day..." << std::endl;
 
-	
+
+	std::cout << "Day End! Preparing next day..." << std::endl;
+
+
 	newDay();
-	
-	
 
-	
-	
+
+
+
+
 }
 
 

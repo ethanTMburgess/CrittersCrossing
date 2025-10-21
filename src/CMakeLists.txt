@@ -18,9 +18,10 @@ set(SOURCE_FILES
     Game.cpp
     GameObject.cpp
     Vector2.cpp
+    UImanager.cpp
 )
 
-add_executable(PlatformerSFML ${SOURCE_FILES})
+add_executable(PlatformerSFML ${SOURCE_FILES} "UImanager.cpp" "UImanager.h" "GameStateManager.h" "PlayingState.h" "MenuState.h" "DayEndState.h")
 
 target_link_libraries(PlatformerSFML PRIVATE sfml-graphics sfml-window sfml-system sfml-network sfml-audio)
 target_compile_features(PlatformerSFML PRIVATE cxx_std_20)
