@@ -47,7 +47,7 @@ void Game::mouseClicked(sf::Event event)
 
 	}
 
-	if (collisionCheck(worldClick, nextDayButton))
+	if (collisionCheck(worldClick, uiManager->nextDayButton))
 	{
 
 	}

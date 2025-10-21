@@ -5,6 +5,10 @@ class UImanager
 public:
     UImanager() = default;
 
+
+
+
+
     bool yesButtonDown = false;
     bool noButtonDown = false;
     bool stampDown = false;
@@ -29,4 +33,6 @@ public:
 
     GameObject yesStamp;
     GameObject noStamp;
+
+    GameObject nextDayButton;
 };

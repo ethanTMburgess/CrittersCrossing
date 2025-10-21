@@ -183,8 +183,8 @@ bool Game::init()
 	dayEndBack.getImageFromPath("../data/assets/crossing/UI/day end screen.png");
 	dayEndBack.setPosition(0, 0);
 
-	nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
-	nextDayButton.setPosition(414, 134);
+	uiManager->nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
+	uiManager->nextDayButton.setPosition(414, 134);
 
 
 	return true;
@@ -685,7 +685,7 @@ void Game::renderPlaying()
 void Game::renderDayEnd()
 {
 	dayEndBack.render(window);
-	nextDayButton.render(window);
+	uiManager->nextDayButton.render(window);
 }
 
 void Game::updateMenu(float dt)
