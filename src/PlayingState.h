@@ -1,10 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include "UImanager.h"
-#include "GameObject.h"
+#include <string>
+
+#include"GameObject.h"
 
 class Game;
+class UImanager;
 
 class PlayingState
 {
@@ -16,10 +18,11 @@ public:
     void update(float dt);
     void render(sf::RenderWindow& window);
 
+    int getDayScore() const { return dayScore; }
+
    
 
-    bool getPassportValid() { return passportValid; }
-
+    bool getPassportValid() const { return passportValid; }
     bool collisionCheck(const sf::Vector2f& click, GameObject& object);
     int selectCritter();
     void generateDialougeDetails();
@@ -80,10 +83,12 @@ private:
 
     // Game data
     
-    int currentCritter = 0;
+   
+   int currentCritter = 0;
     int dayScore = 0;
     int currentDay = 0;
     int crittersPerDay = 5;
+   
 
     // Strings
     std::string firstName;
@@ -99,6 +104,7 @@ private:
     std::string passportReason;
     std::string passportDay;
 
+    
     
 
     // Timers

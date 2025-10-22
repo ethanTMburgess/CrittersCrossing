@@ -1,21 +1,12 @@
+#include "Game.h"
+#include "GameObject.h"
+#include "UImanager.h"
+#include "PlayingState.h"
+#include "DayEndState.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 
-
-#include "Game.h"
-#include "GameObject.h"
-#include "Vector2.h"
-
-#include "UImanager.h"
-
-#include "PlayingState.h"
-#include "MenuState.h"
-#include "DayEndState.h"
-
-#include "GameStateManager.h"
 
 
 
@@ -28,13 +19,18 @@ Game::Game(sf::RenderWindow& game_window)
 	srand(time(NULL));
 	UI = new UImanager();
 	playing = new PlayingState(this);
+	dayEnd = new DayEndState(this);
 
+	
 }
 
 Game::~Game()
 {
 	delete UI;
 	delete playing;
+	delete dayEnd;
+
+
 }
 
 bool Game::init()
@@ -72,8 +68,7 @@ bool Game::init()
 	sf::Vector2f stampBasePosition = UI->stamp.sprite.getPosition();
 
 
-	dayEndBack.getImageFromPath("../data/assets/crossing/UI/day end screen.png");
-	dayEndBack.setPosition(0, 0);
+	
 
 	UI->nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
 	UI->nextDayButton.setPosition(414, 134);
@@ -98,7 +93,7 @@ void Game::update(float dt)
 		break;
 
 	case GameState::DAYEND:
-		updateDayEnd(dt);
+		dayEnd->update(dt);
 		break;
 
 	default:
@@ -126,7 +121,8 @@ void Game::render()
 		break;
 
 	case GameState::DAYEND:
-		renderDayEnd();
+		dayEnd->render(window);
+		UI->renderUI(window, dayEnd);
 		break;
 
 	}
@@ -270,8 +266,8 @@ void Game::renderMenu()
 
 void Game::renderDayEnd()
 {
-	dayEndBack.render(window);
-	UI->nextDayButton.render(window);
+
+	
 }
 
 void Game::updateMenu(float dt)

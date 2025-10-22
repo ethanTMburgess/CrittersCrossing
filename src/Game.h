@@ -3,13 +3,16 @@
 #define PLATFORMER_GAME_H
 
 #include <SFML/Graphics.hpp>
-#include "GameObject.h"
-#include "Vector2.h"
-#include <Windows.h>
 #include <cmath>
 #include <SFML/Audio.hpp>
-#include "UImanager.h"
-#include "PlayingState.h"  // Add this
+#include <Windows.h>
+#include "GameObject.h"
+
+
+class GameObject;
+class UImanager;
+class PlayingState;
+class DayEndState;
 
 enum class GameState
 {
@@ -45,7 +48,7 @@ public:
 	std::string* getFirstNamesM() { return firstNamesM; }
 	std::string* getFirstNamesF() { return firstNamesF; }
 	std::string* getLastNames() { return lastNames; }
-
+	
 	std::string* getReasons() { return reasons; }
 	std::string* getReasonsShort() { return reasonsShort; }
 
@@ -54,12 +57,21 @@ public:
 	void setState(GameState newState) { currentState = newState; }
 	void newDay();
 
+	int getDayScore() { return dayScore; }
+	PlayingState* getPlayingState() { return playing; }
+
+	sf::Color getTextColor()const { return textColor; }
+
+	//
+	// static const sf::Color TEXT_COLOR;
+	//
+
 	sf::Music backgroundMusic;
 	
 
 private:
 
-
+	sf::Color textColor = sf::Color(55, 55, 55);
 	
 
 	void updateMenu(float dt);
@@ -70,6 +82,7 @@ private:
 	// Systems
 	UImanager* UI;
 	PlayingState* playing = nullptr;
+	DayEndState* dayEnd = nullptr;
 
 
 	GameObject* objectDragged = nullptr;
@@ -83,7 +96,7 @@ private:
 
 	
 
-	GameObject dayEndBack;
+	
 
 
 	int currentDay = 0;
@@ -113,11 +126,11 @@ private:
 								"\nvisit the shops",
 								"\nmeet somebody by the old well" };
 
-	std::string reasonsShort[5] = { "Business",
-									"Tourism",
-									"Work",
+	std::string reasonsShort[5] = { "trading",
+									"forrest fair",
+									"Handy work",
 									"Shopping",
-									"Social", };
+									"social visit", };
 
 	std::string passportPhotos[5] = { "../Data/assets/crossing/critters/frog passport image.png",
 									 "../Data/assets/crossing/critters/mouse passport image.png",

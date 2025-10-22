@@ -6,7 +6,7 @@
 
 GameObject::GameObject()
 {
-    // constructor
+    
 }
 
 bool GameObject::getImageFromPath(std::string _path)

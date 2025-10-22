@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #ifndef PLATFORMER_GAMEOBJECT_H
 #  define PLATFORMER_GAMEOBJECT_H

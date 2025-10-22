@@ -1,5 +1,6 @@
 #include "PlayingState.h"
 #include "Game.h"
+#include "UImanager.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -598,3 +599,5 @@ bool PlayingState::collisionCheck(const sf::Vector2f& click, GameObject& object)
 	sf::FloatRect bounds = sprite->getGlobalBounds();
 	return bounds.contains(static_cast<float>(click.x), static_cast<float>(click.y));
 }
+
+
