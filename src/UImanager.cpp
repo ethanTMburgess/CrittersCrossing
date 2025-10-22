@@ -7,17 +7,61 @@
 #include <Windows.h>
 #include <cmath>
 
-#include "Game.h"
+
 #include "GameObject.h"
 #include "Vector2.h"
 #include "UImanager.h"
 #include "PlayingState.h"
-#include "MenuState.h"
-#include "DayEndState.h"
 #include "GameStateManager.h"
 
 
+UImanager::UImanager()
+{
+	
+	passportValid = false;
+}
 
+
+
+bool UImanager::initPlayingUI()
+{
+
+	stampShowing = false;
+	stampMoveLeft = false;
+	stampMoveRight = false;
+
+
+
+	stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
+	stamp.setPosition(570, 90);
+
+	stampTab.getImageFromPath("../Data/assets/crossing/UI/stamp tab.png");
+	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
+
+	stampShadow.getImageFromPath("../Data/assets/crossing/UI/stamp shadow.png");
+	
+
+	yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
+	yesButton.setPosition(290 - 5, 20);
+
+	noButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
+	noButton.setPosition(390 - 15, 20);
+
+	nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
+	nextButton.setPosition(490 - 10, 20);
+
+	calendar.getImageFromPath("../Data/assets/crossing/UI/calendar.png");
+	calendar.setPosition(283, 79);
+
+	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
+	officeBack.setPosition(1, 1);
+
+
+
+
+
+	return true;
+}
 
 
 
@@ -27,80 +71,81 @@ void Game::mouseClicked(sf::Event event)
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
 	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
-	if (collisionCheck(worldClick, uiManager->yesButton))
+	if (playing->collisionCheck(worldClick, UI->yesButton))
 	{
 
 		std::cout << "yes button clicked\n";
-		uiManager->yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
+		UI->yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
+		UI->officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
 
-		buttonPressSound.play();
+		playing->buttonPressSound.play();
 
-		uiManager->yesButtonDown = true;
-		uiManager->ButtonTimer = 0.0f;
+		UI->yesButtonDown = true;
+		UI->ButtonTimer = 0.0f;
 
-		uiManager->yesButtonPressed = true;
+		UI->yesButtonPressed = true;
 
-		uiManager->noButtonPressed = false;
+		UI->noButtonPressed = false;
 
 
 	}
 
-	if (collisionCheck(worldClick, uiManager->nextDayButton))
+	if (playing->collisionCheck(worldClick, UI->nextDayButton))
 	{
 
 	}
 
-	if (collisionCheck(worldClick, uiManager->noButton))
+	if (playing->collisionCheck(worldClick, UI->noButton))
 	{
 		std::cout << "no button clicked\n";
-		uiManager->noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
+		UI->noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
+		UI->officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
 
-		buttonPressSound.play();
+		playing->buttonPressSound.play();
 
-		uiManager->noButtonDown = true;
-		uiManager->ButtonTimer = 0.0f;
+		UI->noButtonDown = true;
+		UI->ButtonTimer = 0.0f;
 
-		uiManager->noButtonPressed = true;
-		uiManager->yesButtonPressed = false;
+		UI->noButtonPressed = true;
+		UI->yesButtonPressed = false;
 	}
 
 
 	// next button should only work if a descision has been made by the player
 
-	sf::Vector2f passportPos = passport.sprite.getPosition();
-	if (collisionCheck(worldClick, uiManager->nextButton) && (uiManager->yesButtonPressed || uiManager->noButtonPressed) && uiManager->stampPressed && passportPos.x < 139)
+	sf::Vector2f passportPos = playing->passport.sprite.getPosition();
+	if (playing->collisionCheck(worldClick, UI->nextButton) && (UI->yesButtonPressed || UI->noButtonPressed) && UI->stampPressed && passportPos.x < 139)
 	{
 
 		std::cout << "next button clicked\n";
-		uiManager->nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
+		UI->nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
 
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
-		uiManager->nextButtonPressed = true;
-		uiManager->ButtonTimer = 0.0f;
 
-		if (uiManager->noButtonPressed && passportValid)
+		UI->officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
+		UI->nextButtonPressed = true;
+		UI->ButtonTimer = 0.0f;
+
+		if (UI->noButtonPressed && playing->passportValid)
 		{
 			std::cout << "passport was valid but denied\n";
 			dayScore = dayScore - 1;
 		}
 
-		else if (uiManager->noButtonPressed && !passportValid)
+		else if (UI->noButtonPressed && !playing->passportValid)
 		{
 			std::cout << "passport was invalid and denied\n";
 			dayScore = dayScore + 1;
 		}
 
-		else if (uiManager->yesButtonPressed && !passportValid)
+		else if (UI->yesButtonPressed && !playing->passportValid)
 		{
 			std::cout << "passport was invalid but allowed\n";
 			dayScore = dayScore - 1;
 		}
 
-		else if (uiManager->yesButtonPressed && passportValid)
+		else if (UI->yesButtonPressed && playing->passportValid)
 		{
 			std::cout << "passport was valid and allowed\n";
 			dayScore = dayScore + 1;
@@ -108,76 +153,132 @@ void Game::mouseClicked(sf::Event event)
 
 
 
-		buttonPressSound.play();
+		playing->buttonPressSound.play();
 
 		// make critter move left off screen
-		critterMoveLeft = true;
+		playing->critterMoveLeft = true;
 
-		uiManager->yesButtonPressed = false;
-		uiManager->noButtonPressed = false;
-		uiManager->stampPressed = false;
+		UI->yesButtonPressed = false;
+		UI->noButtonPressed = false;
+		UI->stampPressed = false;
 
-		uiManager->yesStampApplied = false;
-		uiManager->noStampApplied = false;
+		UI->yesStampApplied = false;
+		UI->noStampApplied = false;
 
-		hasGeneratedDialougeDetails = false;
-		hasGeneratedPassportDetails = false;
+		playing->hasGeneratedDialougeDetails = false;
+		playing->hasGeneratedPassportDetails = false;
 
-		critterInPosition = false;
+		playing->critterInPosition = false;
 
-		crittersSeen = crittersSeen + 1;
+		playing->crittersSeen = playing->crittersSeen + 1;
 
 
 	}
-	else if (collisionCheck(worldClick, uiManager->nextButton))
+	else if (playing->collisionCheck(worldClick, UI->nextButton))
 	{
 		std::cout << "select [yes / no]\n";
 	}
 
-	if (collisionCheck(worldClick, passport))
+	if (playing->collisionCheck(worldClick, playing->passport))
 	{
 		std::cout << "passport clicked\n";
-		hover = true;
+		playing->hover = true;
 
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (collisionCheck(worldClick, uiManager->stampTab) && stampShowing == false)
+	if (playing->collisionCheck(worldClick, UI->stampTab) && UI->stampShowing == false)
 	{
 		std::cout << "stamp tab clicked\n";
-		stampMoveLeft = true;
+		UI->stampMoveLeft = true;
 
-		stampMoveRight = false;
+		UI->stampMoveRight = false;
 
-		stampShowing = true;
+		UI->stampShowing = true;
 
 
 	}
 
-	else if (collisionCheck(worldClick, uiManager->stampTab) && stampShowing == true)
+	else if (playing->collisionCheck(worldClick, UI->stampTab) && UI->stampShowing == true)
 	{
 		std::cout << "stamp tab clicked\n";
 
-		stampMoveLeft = false;
+		UI->stampMoveLeft = false;
 
-		stampMoveRight = true;
+		UI->stampMoveRight = true;
 
-		stampShowing = false;
+		UI->stampShowing = false;
 
 
 
 	}
 
-	if (collisionCheck(worldClick, uiManager->stamp) && stampShowing == true && (uiManager->yesButtonPressed || uiManager->noButtonPressed))
+	if (playing->collisionCheck(worldClick, UI->stamp) && UI->stampShowing == true && (UI->yesButtonPressed || UI->noButtonPressed))
 	{
-		uiManager->stampDown = true;
+		UI->stampDown = true;
 		std::cout << "stamp clicked\n";
-		uiManager->stamp.getImageFromPath("../Data/assets/crossing/UI/stamp pressed.png");
-		uiManager->ButtonTimer = 0.0f;
+		UI->stamp.getImageFromPath("../Data/assets/crossing/UI/stamp pressed.png");
+		UI->ButtonTimer = 0.0f;
 
-		stampSound.play();
+		playing->stampSound.play();
 	}
 
 
+}
+
+void UImanager::UpdateUI(float dt, const sf::Vector2f& passportPos, bool passportOpened)
+{
+
+	
+
+
+
+	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
+	stampShadow.setPosition(stamp.sprite.getPosition().x, stamp.sprite.getPosition().y + 70);
+
+	if (stampMoveLeft)
+	{
+		stamp.setVector(-1, 0);
+		stamp.setSpeed(stampSpeed);
+		stamp.move(stamp.getVector()->x * stamp.getSpeed(), stamp.getVector()->y * stamp.getSpeed());
+
+		if (stamp.sprite.getPosition().x <= stampVisible)
+		{
+			stamp.setPosition(stampVisible, 90);
+			stampMoveLeft = false;
+			stampShowing = true;
+		}
+	}
+
+	if (stampMoveRight)
+	{
+		stamp.setVector(1, 0);
+		stamp.setSpeed(stampSpeed);
+		stamp.move(stamp.getVector()->x * stamp.getSpeed(), stamp.getVector()->y * stamp.getSpeed());
+
+		if (stamp.sprite.getPosition().x >= stampHidden)
+		{
+			stamp.setPosition(stampHidden, 90);
+			stampMoveLeft = false;
+			stampShowing = false;
+		}
+
+	}
+}
+
+void UImanager::renderUI(sf::RenderWindow& window, bool passportOpened)
+{
+	
+
+	yesButton.render(window);
+	noButton.render(window);
+	nextButton.render(window);
+
+	// Render stamp system
+	stampShadow.render(window);
+	stamp.render(window);
+	stampTab.render(window);
+
+	
 }
