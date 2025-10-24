@@ -14,7 +14,7 @@ public:
 	UImanager();
 	~UImanager();
 
-	void mouseClicked(sf::Event event);
+	void mouseClicked(sf::RenderWindow& window, sf::Event event);
 
 
 

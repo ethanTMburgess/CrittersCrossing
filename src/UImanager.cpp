@@ -86,7 +86,7 @@ bool UImanager::initdayEndUI()
 
 
 
-void UImanager::mouseClicked(sf::Event event)
+void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 {
 	//get the click position
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
