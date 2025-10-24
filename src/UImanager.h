@@ -4,7 +4,7 @@
 #include <SFML/Audio.hpp>
 
 class Game;
-
+class PlayingState;
 
 class UImanager
 {
@@ -12,7 +12,7 @@ class UImanager
 	
 public:
 	UImanager();
-	~UImanager();
+	
 
 	void mouseClicked(sf::RenderWindow& window, sf::Event event);
 
@@ -27,6 +27,9 @@ public:
 	void UpdateUI(float dt, const sf::Vector2f& passportPos, bool passportOpened);
 	void renderPlayingUI(sf::RenderWindow& window, bool passportOpened);
 	void renderDayEndUI(sf::RenderWindow& window);
+
+	void setgame(Game* gamePtr) { game = gamePtr; }
+	void setPlayingState(PlayingState* playingState) { playing = playingState; }
 
 	//sounds
 	sf::SoundBuffer buttonPressBuffer;
@@ -87,7 +90,7 @@ private:
 	int dayScore;
 
 	
-	Game* game = nullptr;
+	Game* game;
 	PlayingState* playing;
 
 

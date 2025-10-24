@@ -17,11 +17,12 @@
 
 UImanager::UImanager()
 {
-	
-	// playing = new PlayingState();
-	passportValid = false;
-	
-	
+
+
+	playing = nullptr;
+	game = nullptr;
+	//playing = new PlayingState(this);
+
 }
 
 
@@ -30,14 +31,15 @@ UImanager::UImanager()
 bool UImanager::initPlayingUI()
 {
 
-	
+	passportValid = false;
 
 	stampShowing = false;
 	stampMoveLeft = false;
 	stampMoveRight = false;
 
+	
 
-
+	
 	stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
 	stamp.setPosition(570, 90);
 
@@ -45,7 +47,7 @@ bool UImanager::initPlayingUI()
 	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
 
 	stampShadow.getImageFromPath("../Data/assets/crossing/UI/stamp shadow.png");
-	
+
 
 	yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
 	yesButton.setPosition(290 - 5, 20);
@@ -61,13 +63,19 @@ bool UImanager::initPlayingUI()
 
 	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 	officeBack.setPosition(1, 1);
+	
 
 
-
-
+	
 
 	return true;
 }
+
+
+
+
+
+
 
 bool UImanager::initdayEndUI()
 {
@@ -85,12 +93,20 @@ bool UImanager::initdayEndUI()
 
 void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 {
-	if (!game || !playing)
+	
+	if (!game)
 	{
-		std::cout << "UImanager: game or playing is null!" << std::endl;
+		std::cout << "UImanager: game is null!" << std::endl;
 		return;
 	}
 
+	if (!playing)
+	{
+		std::cout << "UImanager: playing is null!" << std::endl;
+		return;
+	}
+
+	
 
 
 	//get the click position
@@ -138,13 +154,13 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 		yesButtonPressed = false;
 	}
 
-	sf::Vector2f passportPos(0, 0);
+	
 	bool hasValidPassport = false;
 
 
 	// next button should only work if a descision has been made by the player
 
-	//sf::Vector2f passportPos = playing-> passport.sprite.getPosition();
+	sf::Vector2f passportPos = playing-> passport.sprite.getPosition();
 	if (game->collisionCheck(worldClick, nextButton) && (yesButtonPressed || noButtonPressed) && stampPressed && passportPos.x < 139)
 	{
 
@@ -254,12 +270,21 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 	}
 
 
+
+
+
+	
+
+
+
+	
+
 }
 
 void UImanager::UpdateUI(float dt, const sf::Vector2f& passportPos, bool passportOpened)
 {
 
-	
+
 
 
 
@@ -298,7 +323,7 @@ void UImanager::UpdateUI(float dt, const sf::Vector2f& passportPos, bool passpor
 
 void UImanager::renderPlayingUI(sf::RenderWindow& window, bool passportOpened)
 {
-	
+
 
 	yesButton.render(window);
 	noButton.render(window);
@@ -309,12 +334,12 @@ void UImanager::renderPlayingUI(sf::RenderWindow& window, bool passportOpened)
 	stamp.render(window);
 	stampTab.render(window);
 
-	
+
 }
 
 void UImanager::renderDayEndUI(sf::RenderWindow& window)
 {
 	dayEndBackground.render(window);
 	nextDayButton.render(window);
-	
+
 }

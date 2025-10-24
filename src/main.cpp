@@ -70,7 +70,7 @@ int main()
 
           if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
           {
-              UI.mouseClicked(window, event);
+              //UI.mouseClicked(window, event);
               game.mousePressed(event);
 
           }

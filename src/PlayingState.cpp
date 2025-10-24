@@ -464,7 +464,7 @@ void PlayingState::generatePassportDetails()
 	// Changes name on passport to be incorrect
 	if (missmatchChance == 1)
 	{
-		std::cout << "------------------\nname mismatch\n";
+		std::cout << "------------------\nname mismatch - DENY\n";
 
 		if (isMale)
 		{

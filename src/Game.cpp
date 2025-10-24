@@ -21,6 +21,9 @@ Game::Game(sf::RenderWindow& game_window)
 	playing = new PlayingState(this);
 	dayEnd = new DayEndState(this);
 
+	UI->setgame(this);
+	UI->setPlayingState(playing);
+
 	
 }
 
@@ -143,6 +146,12 @@ void Game::render()
 
 void Game::mousePressed(sf::Event event)
 {
+
+	if (UI)
+	{
+		UI->mouseClicked(window, event);
+	}
+	
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
 	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
@@ -155,8 +164,11 @@ void Game::mousePressed(sf::Event event)
 		dragOffset = worldClick - objectPos;
 
 		passportDragged = true;
-		std::cout << "presssssed\n";
+		//std::cout << "presssssed\n";
 	}
+	
+
+
 }
 
 void Game::mouseMoved(sf::Event event)
@@ -170,7 +182,7 @@ void Game::mouseMoved(sf::Event event)
 		// will pull the object based on mouse. offset should allow for the passport to not snap
 		objectDragged->setPosition(worldPos.x - dragOffset.x, (worldPos.y - dragOffset.y - 5));
 
-		std::cout << "drraaaaaagged\n";
+		//std::cout << "drraaaaaagged\n";
 
 		sf::Vector2f passportPos = playing->passport.sprite.getPosition();
 
@@ -214,7 +226,7 @@ void Game::mouseReleased(sf::Event event)
 
 
 
-	std::cout << "releaaaaased\n";
+	//std::cout << "releaaaaased\n";
 
 	playing->namePPtext.setPosition(static_cast<int>(playing->passport.sprite.getPosition().x + 5), static_cast<int>(playing->passport.sprite.getPosition().y + 5));
 	playing->reasonPPtext.setPosition(static_cast<int>(playing->passport.sprite.getPosition().x + 5), static_cast<int>(playing->passport.sprite.getPosition().y + 25));
@@ -240,6 +252,7 @@ void Game::newDay()
 
 		std::cout << "--------------------\nNew Day!\n";
 		currentDay++;
+		std::cout << daysOfWeek[currentDay];
 	}
 	else
 	{
@@ -308,9 +321,39 @@ bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)
 {
 
 	sf::Sprite* sprite = object.getSprite();
-	sf::FloatRect bounds = sprite->getGlobalBounds();
-	return bounds.contains(static_cast<float>(click.x), static_cast<float>(click.y));
-}
 
+	if (!sprite)
+	{
+		std::cout << "CRITICAL: sprite pointer is null!" << std::endl;
+		return false;
+	}
+
+	// Check if the sprite's texture pointer is valid
+	const sf::Texture* texture = sprite->getTexture();
+	if (texture == nullptr)
+	{
+		std::cout << "CRITICAL: sprite texture is null!" << std::endl;
+		return false;
+	}
+
+	// Check if the texture pointer looks corrupted (pointing to garbage memory)
+	if (reinterpret_cast<uintptr_t>(texture) < 0x1000) // Too low address
+	{
+		std::cout << "CRITICAL: texture pointer is corrupted (low address)!" << std::endl;
+		return false;
+	}
+
+	// Now safely get bounds
+	try
+	{
+		sf::FloatRect bounds = sprite->getGlobalBounds();
+		return bounds.contains(click.x, click.y);
+	}
+	catch (...)
+	{
+		std::cout << "CRITICAL: Exception getting sprite bounds!" << std::endl;
+		return false;
+	}
+}
 
 

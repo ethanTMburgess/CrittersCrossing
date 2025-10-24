@@ -83,9 +83,9 @@ private:
 	void renderDayEnd();
 
 	// Systems
-	UImanager* UI = nullptr;
-	PlayingState* playing = nullptr;
-	DayEndState* dayEnd = nullptr;
+	UImanager* UI ;
+	PlayingState* playing ;
+	DayEndState* dayEnd ;
 
 
 	GameObject* objectDragged = nullptr;

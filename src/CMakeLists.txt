@@ -23,7 +23,16 @@ set(SOURCE_FILES
     DayEndState.cpp
 )
 
-add_executable(PlatformerSFML ${SOURCE_FILES} "UImanager.cpp" "UImanager.h" "PlayingState.h" "MenuState.h" "DayEndState.h" "PlayingState.cpp" "DayEndState.cpp")
+set(HEADER_FILES
+    Game.h
+    GameObject.h
+    Vector2.h
+    UImanager.h
+    PlayingState.h
+    DayEndState.h
+)
+
+add_executable(PlatformerSFML ${SOURCE_FILES} ${HEADER_FILES})
 
 target_link_libraries(PlatformerSFML PRIVATE sfml-graphics sfml-window sfml-system sfml-network sfml-audio)
 target_compile_features(PlatformerSFML PRIVATE cxx_std_20)
