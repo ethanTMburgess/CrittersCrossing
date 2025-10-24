@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Game.h"
+#include "UImanager.h"
 #include "GameObject.h"
 #include <windows.h>
 
@@ -33,6 +34,8 @@ int main()
  
   //initialise an instance of the game class
   Game game(window);
+  UImanager UI;
+ 
 
   //run the init function of the game class and check it all initialises ok
   if (!game.init())
@@ -67,7 +70,7 @@ int main()
 
           if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
           {
-              game.mouseClicked(event);
+              UI.mouseClicked(event);
               game.mousePressed(event);
 
           }

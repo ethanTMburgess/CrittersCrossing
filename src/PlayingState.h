@@ -23,7 +23,7 @@ public:
    
 
     bool getPassportValid() const { return passportValid; }
-    bool collisionCheck(const sf::Vector2f& click, GameObject& object);
+    
     int selectCritter();
     void generateDialougeDetails();
     void generatePassportDetails();
@@ -59,6 +59,7 @@ public:
 
     int crittersSeen = 0;
 
+    int dayScore = 0;
 private:
     Game* game;
     UImanager* UI;
@@ -85,9 +86,9 @@ private:
     
    
    int currentCritter = 0;
-    int dayScore = 0;
+    
     int currentDay = 0;
-    int crittersPerDay = 5;
+    int crittersPerDay = 1;
    
 
     // Strings

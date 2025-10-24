@@ -32,11 +32,13 @@ public:
 	void render();
 
 	// Input handling
-	void mouseClicked(sf::Event event);
+	
 	void mousePressed(sf::Event event);
 	void mouseMoved(sf::Event event);
 	void mouseReleased(sf::Event event);
 	void keyPressed(sf::Event event);
+
+	bool collisionCheck(const sf::Vector2f& click, GameObject& object);
 
 	// Getters
 	sf::RenderWindow& getWindow() { return window; }

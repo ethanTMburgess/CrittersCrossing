@@ -117,12 +117,13 @@ void Game::render()
 
 	case GameState::PLAYING:
 		playing->render(window);
-		UI->renderUI(window, playing->passportOpened);
+		UI->renderPlayingUI(window, playing->passportOpened);
 		break;
 
 	case GameState::DAYEND:
 		dayEnd->render(window);
-		UI->renderUI(window, dayEnd);
+		UI->initdayEndUI();
+		UI->renderDayEndUI(window);
 		break;
 
 	}
@@ -145,7 +146,7 @@ void Game::mousePressed(sf::Event event)
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
 	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
-	if (playing->collisionCheck(worldClick, playing->passport))
+	if (collisionCheck(worldClick, playing->passport))
 	{
 		objectDragged = &playing->passport;
 
@@ -244,6 +245,7 @@ void Game::newDay()
 	{
 		currentDay = 0;
 	}
+	currentState = GameState::DAYEND;
 	money = money + dayScore * 5;
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
 
@@ -302,7 +304,13 @@ void Game::updateDayEnd(float dt)
 }
 
 
+bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)
+{
 
+	sf::Sprite* sprite = object.getSprite();
+	sf::FloatRect bounds = sprite->getGlobalBounds();
+	return bounds.contains(static_cast<float>(click.x), static_cast<float>(click.y));
+}
 
 
 

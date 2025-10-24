@@ -5,14 +5,15 @@
 
 DayEndState::DayEndState(Game* game) : game(game)
 {
-	UI = game->getUI();
+	// UI = game->getUI();
+	UI = new UImanager();
 
 	dayScore = game->getDayScore();
 }
 
 DayEndState::~DayEndState()
 {
-
+	delete UI;
 }
 
 bool DayEndState::init()
@@ -30,7 +31,7 @@ bool DayEndState::init()
 
 void DayEndState::update(float dt)
 {
-
+	
 }
 
 void DayEndState::render(sf::RenderWindow& window)

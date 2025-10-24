@@ -2,18 +2,31 @@
 #include "GameObject.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
+class Game;
+
+
 class UImanager
 {
+
+	
 public:
 	UImanager();
+	~UImanager();
+
+	void mouseClicked(sf::Event event);
+
+
 
 	// Initialize UI
 	bool initPlayingUI();
+	bool initdayEndUI();
 
 	// Update and render
 
 	void UpdateUI(float dt, const sf::Vector2f& passportPos, bool passportOpened);
-	void renderUI(sf::RenderWindow& window, bool passportOpened);
+	void renderPlayingUI(sf::RenderWindow& window, bool passportOpened);
+	void renderDayEndUI(sf::RenderWindow& window);
 
 	//sounds
 	sf::SoundBuffer buttonPressBuffer;
@@ -21,6 +34,10 @@ public:
 	sf::Sound buttonPressSound;
 	sf::Sound stampSound;
 
+
+
+
+	// getters and setters for these variables, then move to private
 	// UI state
 	bool yesButtonDown = false;
 	bool noButtonDown = false;
@@ -54,18 +71,24 @@ public:
 	GameObject stampTab;
 	GameObject stampShadow;
 	
-	GameObject nextDayButton;
+	
 	GameObject calendar;
 	GameObject speechBubble;
 	GameObject officeBack;
 
+	GameObject nextDayButton;
+	GameObject dayEndBackground;
 
 private:
 	// UI constants
 	const float windowWidth = 570.0f;
 	const float stampWidth = 167.0f;
 
-	
+	int dayScore;
+
+	UImanager* UI;
+	Game* game;
+	PlayingState* playing;
 
 
 };

@@ -149,6 +149,8 @@ void PlayingState::update(float dt)
 			UI->ButtonTimer = 0.0f;
 			UI->stampMoveRight = true;
 
+			game->newDay();
+
 		}
 	}
 
@@ -268,6 +270,11 @@ void PlayingState::update(float dt)
 			UI->ButtonTimer = 0.0f;
 
 		}
+	}
+
+	if (crittersSeen >= crittersPerDay)
+	{
+		game->newDay();
 	}
 
 
@@ -592,12 +599,6 @@ void PlayingState::generateDialougeDetails()
 	std::cout << nameDialogue << std::endl;
 	std::cout << reasonDialogue << std::endl;
 }
-bool PlayingState::collisionCheck(const sf::Vector2f& click, GameObject& object)
-{
 
-	sf::Sprite* sprite = object.getSprite();
-	sf::FloatRect bounds = sprite->getGlobalBounds();
-	return bounds.contains(static_cast<float>(click.x), static_cast<float>(click.y));
-}
 
 
