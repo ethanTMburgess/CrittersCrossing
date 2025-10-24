@@ -8,6 +8,13 @@ GameObject::GameObject()
 {
     
 }
+/*
+GameObject::~GameObject()
+{
+    
+    std::cout << "GameObject destroyed - sprite texture: " << (sprite.getTexture() ? "VALID" : "NULL") << std::endl;
+}
+*/
 
 bool GameObject::getImageFromPath(std::string _path)
 {

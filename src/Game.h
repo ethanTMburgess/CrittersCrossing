@@ -60,6 +60,7 @@ public:
 	void newDay();
 
 	int getDayScore() { return dayScore; }
+	void setDayScore(int score) { dayScore = score; }
 	PlayingState* getPlayingState() { return playing; }
 
 	sf::Color getTextColor()const { return textColor; }
@@ -82,7 +83,7 @@ private:
 	void renderDayEnd();
 
 	// Systems
-	UImanager* UI;
+	UImanager* UI = nullptr;
 	PlayingState* playing = nullptr;
 	DayEndState* dayEnd = nullptr;
 

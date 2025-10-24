@@ -86,8 +86,8 @@ private:
 
 	int dayScore;
 
-	UImanager* UI;
-	Game* game;
+	
+	Game* game = nullptr;
 	PlayingState* playing;
 
 

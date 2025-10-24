@@ -5,10 +5,10 @@
 
 DayEndState::DayEndState(Game* game) : game(game)
 {
-	// UI = game->getUI();
+
 	UI = new UImanager();
 
-	dayScore = game->getDayScore();
+	
 }
 
 DayEndState::~DayEndState()
@@ -18,6 +18,7 @@ DayEndState::~DayEndState()
 
 bool DayEndState::init()
 {
+	dayScore = game->getDayScore();
 
 	sf::Font& font = game->getFont();
 

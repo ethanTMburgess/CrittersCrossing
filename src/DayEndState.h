@@ -21,7 +21,8 @@ private:
 	Game* game;
 	UImanager* UI;
 	PlayingState* playing;
-	int dayScore;
+
+	int dayScore = 0;
 
 	GameObject dayEndBack;
 

@@ -25,10 +25,12 @@ PlayingState::PlayingState(Game* game) : game(game)
 	currentDay = game->getCurrentDay();
 	crittersPerDay = game->getCrittersPerDay();
 
+	std::cout << "playingState CONSTRUCTED AT: " << this << std::endl;
+
 }
 PlayingState::~PlayingState()
 {
-
+	std::cout << "playingState DESTROYED AT: " << this << std::endl;
 }
 bool PlayingState::init()
 {
@@ -279,7 +281,7 @@ void PlayingState::update(float dt)
 
 
 
-	Game mouseClicked(sf::Event event);
+	Game mouseClicked(sf::RenderWindow& window, sf::Event event);
 
 
 

@@ -83,7 +83,7 @@ int main()
               
           }
 
-          // works as it should
+          
           if (event.type == sf::Event::MouseMoved)
           {
               game.mouseMoved(event);
@@ -91,10 +91,7 @@ int main()
 
 
 
-          //'update' element of the game loop
          
-
-          //'render' element of the game loop
           
       }
 
