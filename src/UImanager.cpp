@@ -85,7 +85,7 @@ bool UImanager::initdayEndUI()
 	dayEndBackground.setPosition(0, 0);
 
 	nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
-	nextDayButton.setPosition(416, 143);
+	nextDayButton.setPosition(412, 130);
 	return true;
 }
 
