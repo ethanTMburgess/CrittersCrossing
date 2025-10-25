@@ -258,6 +258,7 @@ void Game::newDay()
 	{
 		currentDay = 0;
 	}
+	
 	currentState = GameState::DAYEND;
 	money = money + dayScore * 5;
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
@@ -298,23 +299,7 @@ void Game::updateMenu(float dt)
 
 
 
-void Game::updateDayEnd(float dt)
-{
-	static float timer = 0.0f;
 
-
-
-
-	std::cout << "Day End! Preparing next day..." << std::endl;
-
-
-	newDay();
-
-
-
-
-
-}
 
 
 bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)

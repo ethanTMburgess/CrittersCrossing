@@ -55,6 +55,9 @@ public:
     bool hasGeneratedDialougeDetails = false;
     bool hasGeneratedPassportDetails = false;
     
+
+    
+
     bool hover = false;
 
     int crittersSeen = 0;
@@ -87,7 +90,7 @@ private:
    
    int currentCritter = 0;
     
-    int currentDay = 0;
+   int currentDay = 0;
     int crittersPerDay = 1;
    
 

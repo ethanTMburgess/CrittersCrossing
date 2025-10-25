@@ -56,6 +56,7 @@ public:
 
 	std::string* getPassportPhotos() { return passportPhotos; }
 
+	GameState currentState;
 	void setState(GameState newState) { currentState = newState; }
 	void newDay();
 
@@ -71,6 +72,8 @@ public:
 
 	sf::Music backgroundMusic;
 	
+	std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+
 
 private:
 
@@ -78,7 +81,7 @@ private:
 	
 
 	void updateMenu(float dt);
-	void updateDayEnd(float dt);
+	
 	void renderMenu();
 	void renderDayEnd();
 
@@ -92,7 +95,7 @@ private:
 	sf::Vector2f dragOffset;
 	bool passportDragged = false;
 
-	GameState currentState;
+	
 	sf::RenderWindow& window;
 	sf::Font font;
 
@@ -103,13 +106,12 @@ private:
 
 
 	int currentDay = 0;
-	const int crittersPerDay = 5;
+	const int crittersPerDay = 1;
 	int money = 0;
 	int dayScore = 0;
 
 	// Shared arrays
-	std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
-
+	
 	std::string firstNamesM[3] = { "Fred",
 									"Eliot",
 									"Logan" };

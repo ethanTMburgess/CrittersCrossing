@@ -107,6 +107,23 @@ void PlayingState::update(float dt)
 
 	UI->UpdateUI(dt, passport.sprite.getPosition(), passportOpened);
 
+
+	currentDay = game->getCurrentDay();
+	calendarText.setString(game->daysOfWeek[currentDay]);
+	
+		
+	
+
+	calendarText.setString(daysOfWeek[currentDay]);
+
+	
+		
+	
+
+	calendarText.setString(daysOfWeek[game->getCurrentDay()]);
+
+	
+
 	calendarText.setPosition(UI->calendar.sprite.getPosition().x + 13, UI->calendar.sprite.getPosition().y + 3);
 
 	yesStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
@@ -144,14 +161,14 @@ void PlayingState::update(float dt)
 	{
 
 		UI->ButtonTimer += dt;
-		if (UI->ButtonTimer >= ButtonPressedTime)
+		if (UI->ButtonTimer >= ButtonPressedTime && (critter.sprite.getPosition().x < 1))
 		{
 			UI->nextButton.getImageFromPath("../Data/assets/crossing/UI/next button.png");
 			UI->nextButtonPressed = false;
 			UI->ButtonTimer = 0.0f;
 			UI->stampMoveRight = true;
 
-			game->newDay();
+			// game->newDay();
 
 		}
 	}
@@ -196,21 +213,23 @@ void PlayingState::update(float dt)
 		// stop when completely off the left side of the screen
 		if (critter.sprite.getPosition().x + critter.sprite.getGlobalBounds().width < 0.0f)
 		{
-
-
+			crittersSeen++;
 			if (crittersSeen >= crittersPerDay)
 			{
-				std::cout << "game state changed\n";
-
+				game->newDay();
 			}
-			else
-			{
+
+
 				selectCritter();
 				critterMoveLeft = false;
 
-			}
+			
+				
+			
 
 		}
+
+		std::cout << crittersSeen << std::endl;
 	}
 
 	passportPhoto.setPosition(passport.sprite.getPosition().x + 67, passport.sprite.getPosition().y + 5);
@@ -274,10 +293,7 @@ void PlayingState::update(float dt)
 		}
 	}
 
-	if (crittersSeen >= crittersPerDay)
-	{
-		game->newDay();
-	}
+	
 
 
 
@@ -371,9 +387,9 @@ void PlayingState::render(sf::RenderWindow& window)
 };
 int PlayingState::selectCritter() {
 
-	if (crittersSeen >= crittersPerDay)
+	if (crittersSeen >= crittersPerDay && (critter.sprite.getPosition().x < 10))
 	{
-		game->newDay();
+		//game->newDay();
 	}
 
 	int chosenCritter = rand() % 5 + 1;

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "GameObject.h"
+#include "Game.h"
 // Forward declarations for all classes you use
 class Game;
 class UImanager;

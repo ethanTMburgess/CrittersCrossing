@@ -21,7 +21,7 @@ UImanager::UImanager()
 
 	playing = nullptr;
 	game = nullptr;
-	//playing = new PlayingState(this);
+	
 
 }
 
@@ -272,7 +272,10 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 
 
 
-
+	if (game->collisionCheck(worldClick, nextDayButton))
+	{
+		game->currentState = GameState::PLAYING;
+	}
 	
 
 
