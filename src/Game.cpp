@@ -124,6 +124,7 @@ void Game::render()
 		break;
 
 	case GameState::DAYEND:
+		dayEnd->init();
 		dayEnd->render(window);
 		UI->initdayEndUI();
 		UI->renderDayEndUI(window);

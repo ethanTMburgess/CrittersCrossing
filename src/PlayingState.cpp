@@ -95,7 +95,7 @@ bool PlayingState::init()
 	{
 		std::cout << "Error loading stamp sound\n";
 	}
-	stampSound.setBuffer(stampPressBuffer); // Fixed: was stampSoundsetBuffer
+	stampSound.setBuffer(stampPressBuffer);
 
 	selectCritter();
 	critter.setPosition(78 - 178, 97);
@@ -128,6 +128,7 @@ void PlayingState::update(float dt)
 
 	yesStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
 	noStamp.setPosition(passport.sprite.getPosition().x + 44, passport.sprite.getPosition().y + 18);
+
 
 
 

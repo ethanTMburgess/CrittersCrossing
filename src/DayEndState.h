@@ -23,7 +23,7 @@ private:
 	UImanager* UI;
 	PlayingState* playing;
 
-	int dayScore = 0;
+	int dayScore = 10000;
 
 	GameObject dayEndBack;
 
