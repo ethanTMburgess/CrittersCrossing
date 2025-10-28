@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "UImanager.h"
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include <cstdlib>
 #include <ctime>
 
@@ -110,19 +111,19 @@ void PlayingState::update(float dt)
 
 	currentDay = game->getCurrentDay();
 	calendarText.setString(game->daysOfWeek[currentDay]);
-	
-		
-	
+
+
+
 
 	calendarText.setString(daysOfWeek[currentDay]);
 
-	
-		
-	
+
+
+
 
 	calendarText.setString(daysOfWeek[game->getCurrentDay()]);
 
-	
+
 
 	calendarText.setPosition(UI->calendar.sprite.getPosition().x + 13, UI->calendar.sprite.getPosition().y + 3);
 
@@ -197,6 +198,7 @@ void PlayingState::update(float dt)
 		{
 
 			passport.getImageFromPath("../Data/assets/crossing/UI/closed passport.png");
+			passport.sprite.scale(0.75, 0.75);
 			passportOpened = false;
 		}
 	}
@@ -221,12 +223,12 @@ void PlayingState::update(float dt)
 			}
 
 
-				selectCritter();
-				critterMoveLeft = false;
+			selectCritter();
+			critterMoveLeft = false;
 
-			
-				
-			
+
+
+
 
 		}
 
@@ -239,7 +241,7 @@ void PlayingState::update(float dt)
 	reasonPPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 30);
 	dayPPtext.setPosition(passport.sprite.getPosition().x + 5, passport.sprite.getPosition().y + 45);
 
-	
+
 
 
 	float distanceX = UI->stamp.sprite.getPosition().x - passport.sprite.getPosition().x;
@@ -294,11 +296,11 @@ void PlayingState::update(float dt)
 		}
 	}
 
-	
 
 
 
-	Game mouseClicked(sf::RenderWindow& window, sf::Event event);
+
+	Game mouseClicked(sf::RenderWindow & window, sf::Event event);
 
 
 
@@ -319,7 +321,7 @@ void PlayingState::render(sf::RenderWindow& window)
 
 
 	// office back shows behind the main game backgroudnd
-	UI-> officeBack.render(window);
+	UI->officeBack.render(window);
 
 	critter.render(window);
 
@@ -390,7 +392,7 @@ int PlayingState::selectCritter() {
 
 	if (crittersSeen >= crittersPerDay && (critter.sprite.getPosition().x < 10))
 	{
-		
+
 	}
 
 	int chosenCritter = rand() % 5 + 1;

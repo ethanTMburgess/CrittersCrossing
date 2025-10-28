@@ -33,7 +33,7 @@ public:
 	void render();
 
 	// Input handling
-	
+
 	void mousePressed(sf::Event event);
 	void mouseMoved(sf::Event event);
 	void mouseReleased(sf::Event event);
@@ -51,7 +51,7 @@ public:
 	std::string* getFirstNamesM() { return firstNamesM; }
 	std::string* getFirstNamesF() { return firstNamesF; }
 	std::string* getLastNames() { return lastNames; }
-	
+
 	std::string* getReasons() { return reasons; }
 	std::string* getReasonsShort() { return reasonsShort; }
 
@@ -72,7 +72,7 @@ public:
 	//
 
 	sf::Music backgroundMusic;
-	
+
 	std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 	int currentDay = 0;
 
@@ -82,17 +82,17 @@ public:
 private:
 
 	sf::Color textColor = sf::Color(55, 55, 55);
-	
+
 
 	void updateMenu(float dt);
-	
+
 	void renderMenu();
 	void renderDayEnd();
 
 	// Systems
-	UImanager* UI ;
-	PlayingState* playing ;
-	DayEndState* dayEnd ;
+	UImanager* UI;
+	PlayingState* playing;
+	DayEndState* dayEnd;
 	MenuState* menu;
 
 
@@ -100,23 +100,23 @@ private:
 	sf::Vector2f dragOffset;
 	bool passportDragged = false;
 
-	
+
 	sf::RenderWindow& window;
 	sf::Font font;
 
 
-	
-
-	
 
 
-	
+
+
+
+
 	const int crittersPerDay = 5;
-	
+
 	int dayScore = 0;
 
 	// Shared arrays
-	
+
 	std::string firstNamesM[3] = { "Fred",
 									"Eliot",
 									"Logan" };
