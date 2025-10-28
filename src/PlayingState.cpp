@@ -25,12 +25,12 @@ PlayingState::PlayingState(Game* game) : game(game)
 	currentDay = game->getCurrentDay();
 	crittersPerDay = game->getCrittersPerDay();
 
-	std::cout << "playingState CONSTRUCTED AT: " << this << std::endl;
+	// std::cout << "playingState CONSTRUCTED AT: " << this << std::endl;
 
 }
 PlayingState::~PlayingState()
 {
-	std::cout << "playingState DESTROYED AT: " << this << std::endl;
+	// std::cout << "playingState DESTROYED AT: " << this << std::endl;
 }
 bool PlayingState::init()
 {
@@ -230,7 +230,7 @@ void PlayingState::update(float dt)
 
 		}
 
-		std::cout << crittersSeen << std::endl;
+		//std::cout << crittersSeen << std::endl;
 	}
 
 	passportPhoto.setPosition(passport.sprite.getPosition().x + 67, passport.sprite.getPosition().y + 5);
@@ -390,7 +390,7 @@ int PlayingState::selectCritter() {
 
 	if (crittersSeen >= crittersPerDay && (critter.sprite.getPosition().x < 10))
 	{
-		//game->newDay();
+		
 	}
 
 	int chosenCritter = rand() % 5 + 1;
@@ -467,6 +467,10 @@ int PlayingState::selectCritter() {
 
 	return chosenCritter;
 }
+
+
+
+
 void PlayingState::generatePassportDetails()
 {
 	int missmatchChance = rand() % 8;
@@ -474,7 +478,7 @@ void PlayingState::generatePassportDetails()
 	passportFirstName = firstName;
 	passportLastName = lastName;
 	passportReason = reasonDialoge;
-	passportDay = daysOfWeek[currentDay];
+	passportDay = daysOfWeek[game->currentDay];
 
 
 
@@ -578,12 +582,13 @@ void PlayingState::generatePassportDetails()
 	{
 		std::cout << "--------------------\nAll correct - APPROVE\n";
 
-		passportDay = daysOfWeek[currentDay];
+		passportDay = daysOfWeek[game->currentDay];
 
 		passportValid = true;
 
 	}
 
+	std::cout << "--------------------\n";
 
 	namePPtext.setString(passportFirstName + "\n" + passportLastName);
 	reasonPPtext.setString(passportReason);
@@ -615,8 +620,11 @@ void PlayingState::generateDialougeDetails()
 	nameDialogue = "My name is " + firstName + " " + lastName;
 	reasonDialogue = "I am heading into town to " + reason;
 
+
+	std::cout << "\n======================\n";
 	std::cout << nameDialogue << std::endl;
 	std::cout << reasonDialogue << std::endl;
+	std::cout << "\n======================\n";
 }
 
 

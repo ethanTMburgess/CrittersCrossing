@@ -23,18 +23,21 @@ bool DayEndState::init()
 
 	sf::Font& font = game->getFont();
 
-	if (&font == nullptr)
-	{
-		std::cout << "font is null in day end" << std::endl;
-	}
+	
 
 	dayScoreText.setFont(font);
 	dayScoreText.setString(std::to_string(dayScore));
-	dayScoreText.setCharacterSize(20);
+	dayScoreText.setCharacterSize(32);
 	dayScoreText.setFillColor(sf::Color (55, 55, 55));
-	dayScoreText.setPosition(97, 80);
-	dayScoreText.setFillColor(sf::Color::Red);
+	dayScoreText.setPosition(97, 65);
+	dayScoreText.setFillColor(sf::Color::Black);
 	
+	moneyText.setFont(font);
+	moneyText.setString(std::to_string(game->money));
+	moneyText.setCharacterSize(32);
+	moneyText.setFillColor(sf::Color(55, 55, 55));
+	moneyText.setPosition(97, 146);
+	moneyText.setFillColor(sf::Color::Black);
 	
 
 
@@ -52,15 +55,13 @@ void DayEndState::update(float dt)
 
 void DayEndState::render(sf::RenderWindow& window)
 {
-	if (dayScoreText.getString().isEmpty())
-	{
-		std::cout << "DAY SCORE IS EMPTY" << std::endl;
-	}
+
 	
 	dayEndBack.render(window);
 	
 	UI->nextDayButton.render(window);
 
+	window.draw(moneyText);
 	window.draw(dayScoreText);
 
 }

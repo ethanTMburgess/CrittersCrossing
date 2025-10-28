@@ -81,8 +81,7 @@ bool UImanager::initdayEndUI()
 {
 
 
-	dayEndBackground.getImageFromPath("../Data/assets/crossing/UI/day end screen.png");
-	dayEndBackground.setPosition(0, 0);
+	
 
 	nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
 	nextDayButton.setPosition(412, 130);
@@ -172,6 +171,8 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 		nextButtonPressed = true;
 		ButtonTimer = 0.0f;
 
+		dayScore = game->getDayScore();
+
 		if (noButtonPressed && playing->passportValid)
 		{
 			std::cout << "passport was valid but denied\n";
@@ -196,7 +197,7 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 			dayScore = dayScore + 1;
 		}
 
-
+		game->setDayScore(dayScore);
 
 		playing->buttonPressSound.play();
 
@@ -215,7 +216,7 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 
 		playing->critterInPosition = false;
 
-		playing->crittersSeen = playing->crittersSeen + 1;
+	
 
 
 	}

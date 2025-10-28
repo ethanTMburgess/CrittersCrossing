@@ -253,7 +253,7 @@ void Game::newDay()
 
 		std::cout << "--------------------\nNew Day!\n";
 		currentDay++;
-		std::cout << daysOfWeek[currentDay];
+		
 	}
 	else
 	{

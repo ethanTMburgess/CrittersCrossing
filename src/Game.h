@@ -73,6 +73,9 @@ public:
 	sf::Music backgroundMusic;
 	
 	std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+	int currentDay = 0;
+
+	int money = 0;
 
 
 private:
@@ -105,9 +108,9 @@ private:
 	
 
 
-	int currentDay = 0;
-	const int crittersPerDay = 1;
-	int money = 0;
+	
+	const int crittersPerDay = 5;
+	
 	int dayScore = 0;
 
 	// Shared arrays
@@ -132,7 +135,7 @@ private:
 								"\nmeet somebody by the old well" };
 
 	std::string reasonsShort[5] = { "trading",
-									"forrest fair",
+									"Fair",
 									"Handy work",
 									"Shopping",
 									"social visit", };

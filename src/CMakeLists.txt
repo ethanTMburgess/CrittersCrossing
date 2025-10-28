@@ -32,7 +32,7 @@ set(HEADER_FILES
     DayEndState.h
 )
 
-add_executable(PlatformerSFML ${SOURCE_FILES} ${HEADER_FILES})
+add_executable(PlatformerSFML ${SOURCE_FILES} ${HEADER_FILES} "MenuState.cpp" "MenuState.h")
 
 target_link_libraries(PlatformerSFML PRIVATE sfml-graphics sfml-window sfml-system sfml-network sfml-audio)
 target_compile_features(PlatformerSFML PRIVATE cxx_std_20)
