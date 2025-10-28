@@ -588,7 +588,7 @@ void PlayingState::generatePassportDetails()
 
 	}
 
-	std::cout << "--------------------\n";
+	std::cout << "--------------------\n\n";
 
 	namePPtext.setString(passportFirstName + "\n" + passportLastName);
 	reasonPPtext.setString(passportReason);
@@ -624,7 +624,7 @@ void PlayingState::generateDialougeDetails()
 	std::cout << "\n======================\n";
 	std::cout << nameDialogue << std::endl;
 	std::cout << reasonDialogue << std::endl;
-	std::cout << "\n======================\n";
+	std::cout << "======================\n";
 }
 
 

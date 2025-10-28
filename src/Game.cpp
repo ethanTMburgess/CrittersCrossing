@@ -3,6 +3,7 @@
 #include "UImanager.h"
 #include "PlayingState.h"
 #include "DayEndState.h"
+#include "MenuState.h"
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -20,11 +21,12 @@ Game::Game(sf::RenderWindow& game_window)
 	UI = new UImanager();
 	playing = new PlayingState(this);
 	dayEnd = new DayEndState(this);
+	menu = new MenuState(this);
 
 	UI->setgame(this);
 	UI->setPlayingState(playing);
 
-	
+
 }
 
 Game::~Game()
@@ -39,7 +41,7 @@ Game::~Game()
 bool Game::init()
 {
 
-	currentState = GameState::PLAYING;
+	currentState = GameState::MENU;
 
 	if (!backgroundMusic.openFromFile("../Data/assets/sound/BackgroundMusic.wav"))
 	{
@@ -71,7 +73,7 @@ bool Game::init()
 	sf::Vector2f stampBasePosition = UI->stamp.sprite.getPosition();
 
 
-	
+
 
 	UI->nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
 	UI->nextDayButton.setPosition(414, 134);
@@ -88,7 +90,7 @@ void Game::update(float dt)
 	switch (currentState)
 	{
 	case GameState::MENU:
-		updateMenu(dt);
+		menu->update(dt);
 		break;
 
 	case GameState::PLAYING:
@@ -115,7 +117,10 @@ void Game::render()
 	switch (currentState)
 	{
 	case GameState::MENU:
-		renderMenu();
+		UI->initMenuUI();
+		UI->renderMenuUI(window);
+		menu->init();
+		menu->render(window);
 		break;
 
 	case GameState::PLAYING:
@@ -152,7 +157,7 @@ void Game::mousePressed(sf::Event event)
 	{
 		UI->mouseClicked(window, event);
 	}
-	
+
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
 	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
@@ -167,7 +172,7 @@ void Game::mousePressed(sf::Event event)
 		passportDragged = true;
 		//std::cout << "presssssed\n";
 	}
-	
+
 
 
 }
@@ -253,13 +258,13 @@ void Game::newDay()
 
 		std::cout << "--------------------\nNew Day!\n";
 		currentDay++;
-		
+
 	}
 	else
 	{
 		currentDay = 0;
 	}
-	
+
 	currentState = GameState::DAYEND;
 	money = money + dayScore * 5;
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
@@ -284,7 +289,7 @@ void Game::renderMenu()
 void Game::renderDayEnd()
 {
 
-	
+
 }
 
 void Game::updateMenu(float dt)

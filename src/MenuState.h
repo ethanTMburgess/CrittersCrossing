@@ -14,17 +14,14 @@ private:
 	Game* game;
 	UImanager* UI;
 
-	GameObject playButton;
-	GameObject quitButton;
-
-	bool init();
-	void update(float dt);
-	void render();
-	
 	sf::Text playText;
 
 public:
 	MenuState(Game* game);
 	~MenuState();
 
+
+	bool init();
+	void update(float dt);
+	void render(sf::RenderWindow &window);
 };

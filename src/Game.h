@@ -13,6 +13,7 @@ class GameObject;
 class UImanager;
 class PlayingState;
 class DayEndState;
+class MenuState;
 
 enum class GameState
 {
@@ -92,6 +93,7 @@ private:
 	UImanager* UI ;
 	PlayingState* playing ;
 	DayEndState* dayEnd ;
+	MenuState* menu;
 
 
 	GameObject* objectDragged = nullptr;

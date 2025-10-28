@@ -21,12 +21,14 @@ public:
 	// Initialize UI
 	bool initPlayingUI();
 	bool initdayEndUI();
+	bool initMenuUI();
 
 	// Update and render
 
 	void UpdateUI(float dt, const sf::Vector2f& passportPos, bool passportOpened);
 	void renderPlayingUI(sf::RenderWindow& window, bool passportOpened);
 	void renderDayEndUI(sf::RenderWindow& window);
+	void renderMenuUI(sf::RenderWindow& window);
 
 	void setgame(Game* gamePtr) { game = gamePtr; }
 	void setPlayingState(PlayingState* playingState) { playing = playingState; }
@@ -73,6 +75,13 @@ public:
 	GameObject stamp;
 	GameObject stampTab;
 	GameObject stampShadow;
+
+	GameObject playButton;
+	GameObject quitButton;
+
+
+
+	
 	
 	
 	GameObject calendar;

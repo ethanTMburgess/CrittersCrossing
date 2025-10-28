@@ -3,6 +3,7 @@
 #include <ctime>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System/Time.hpp>
 
 #include <Windows.h>
 #include <cmath>
@@ -21,7 +22,7 @@ UImanager::UImanager()
 
 	playing = nullptr;
 	game = nullptr;
-	
+
 
 }
 
@@ -37,9 +38,9 @@ bool UImanager::initPlayingUI()
 	stampMoveLeft = false;
 	stampMoveRight = false;
 
-	
 
-	
+
+
 	stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
 	stamp.setPosition(570, 90);
 
@@ -63,10 +64,10 @@ bool UImanager::initPlayingUI()
 
 	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 	officeBack.setPosition(1, 1);
-	
 
 
-	
+
+
 
 	return true;
 }
@@ -79,20 +80,27 @@ bool UImanager::initPlayingUI()
 
 bool UImanager::initdayEndUI()
 {
-
-
-	
-
 	nextDayButton.getImageFromPath("../Data/assets/crossing/UI/power button.png");
 	nextDayButton.setPosition(412, 130);
 	return true;
 }
 
 
+bool UImanager::initMenuUI()
+{
+	playButton.getImageFromPath("../Data/assets/crossing/UI/yes button.png");
+	playButton.setPosition(160, 200);
+
+	quitButton.getImageFromPath("../Data/assets/crossing/UI/no button.png");
+	quitButton.setPosition(playButton.sprite.getPosition().x + 200, playButton.sprite.getPosition().y);
+
+	return true;
+}
+
 
 void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 {
-	
+
 	if (!game)
 	{
 		std::cout << "UImanager: game is null!" << std::endl;
@@ -105,183 +113,210 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 		return;
 	}
 
-	
+
 
 
 	//get the click position
 	sf::Vector2i pixelClick{ event.mouseButton.x, event.mouseButton.y };
 	sf::Vector2f worldClick = window.mapPixelToCoords(pixelClick);
 
-	if (game->collisionCheck(worldClick, yesButton))
+	if (game->currentState == GameState::PLAYING)
 	{
 
-		std::cout << "yes button clicked\n";
-		yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
-
-		buttonPressSound.play();
-
-		yesButtonDown = true;
-		ButtonTimer = 0.0f;
-
-		yesButtonPressed = true;
-
-		noButtonPressed = false;
 
 
-	}
-
-	if (game->collisionCheck(worldClick, nextDayButton))
-	{
-
-	}
-
-	if (game->collisionCheck(worldClick, noButton))
-	{
-		std::cout << "no button clicked\n";
-		noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
-
-		buttonPressSound.play();
-
-		noButtonDown = true;
-		ButtonTimer = 0.0f;
-
-		noButtonPressed = true;
-		yesButtonPressed = false;
-	}
-
-	
-	bool hasValidPassport = false;
-
-
-	// next button should only work if a descision has been made by the player
-
-	sf::Vector2f passportPos = playing-> passport.sprite.getPosition();
-	if (game->collisionCheck(worldClick, nextButton) && (yesButtonPressed || noButtonPressed) && stampPressed && passportPos.x < 139)
-	{
-
-		std::cout << "next button clicked\n";
-		nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
-
-
-		officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
-		nextButtonPressed = true;
-		ButtonTimer = 0.0f;
-
-		dayScore = game->getDayScore();
-
-		if (noButtonPressed && playing->passportValid)
+		if (game->collisionCheck(worldClick, yesButton))
 		{
-			std::cout << "passport was valid but denied\n";
-			 dayScore = dayScore - 1;
+
+			std::cout << "yes button clicked\n";
+			yesButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
+
+			officeBack.getImageFromPath("../Data/assets/crossing/UI/green office back.png");
+
+			buttonPressSound.play();
+
+			yesButtonDown = true;
+			ButtonTimer = 0.0f;
+
+			yesButtonPressed = true;
+
+			noButtonPressed = false;
+
+
 		}
 
-		else if (noButtonPressed && !playing->passportValid)
+		if (game->collisionCheck(worldClick, nextDayButton))
 		{
-			std::cout << "passport was invalid and denied\n";
-			dayScore = dayScore + 1;
+
 		}
 
-		else if (yesButtonPressed && !playing->passportValid)
+		if (game->collisionCheck(worldClick, noButton))
 		{
-			std::cout << "passport was invalid but allowed\n";
-			dayScore = dayScore - 1;
+			std::cout << "no button clicked\n";
+			noButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
+
+			officeBack.getImageFromPath("../Data/assets/crossing/UI/red office back.png");
+
+			buttonPressSound.play();
+
+			noButtonDown = true;
+			ButtonTimer = 0.0f;
+
+			noButtonPressed = true;
+			yesButtonPressed = false;
 		}
 
-		else if (yesButtonPressed && playing->passportValid)
+
+		bool hasValidPassport = false;
+
+
+		// next button should only work if a descision has been made by the player
+
+		sf::Vector2f passportPos = playing->passport.sprite.getPosition();
+		if (game->collisionCheck(worldClick, nextButton) && (yesButtonPressed || noButtonPressed) && stampPressed && passportPos.x < 139)
 		{
-			std::cout << "passport was valid and allowed\n";
-			dayScore = dayScore + 1;
+
+			std::cout << "next button clicked\n";
+			nextButton.getImageFromPath("../Data/assets/crossing/UI/next button pressed.png");
+
+
+			officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
+			nextButtonPressed = true;
+			ButtonTimer = 0.0f;
+
+			dayScore = game->getDayScore();
+
+			if (noButtonPressed && playing->passportValid)
+			{
+				std::cout << "passport was valid but denied\n";
+				dayScore = dayScore - 1;
+			}
+
+			else if (noButtonPressed && !playing->passportValid)
+			{
+				std::cout << "passport was invalid and denied\n";
+				dayScore = dayScore + 1;
+			}
+
+			else if (yesButtonPressed && !playing->passportValid)
+			{
+				std::cout << "passport was invalid but allowed\n";
+				dayScore = dayScore - 1;
+			}
+
+			else if (yesButtonPressed && playing->passportValid)
+			{
+				std::cout << "passport was valid and allowed\n";
+				dayScore = dayScore + 1;
+			}
+
+			game->setDayScore(dayScore);
+
+			playing->buttonPressSound.play();
+
+			// make critter move left off screen
+			playing->critterMoveLeft = true;
+
+			yesButtonPressed = false;
+			noButtonPressed = false;
+			stampPressed = false;
+
+			yesStampApplied = false;
+			noStampApplied = false;
+
+			playing->hasGeneratedDialougeDetails = false;
+			playing->hasGeneratedPassportDetails = false;
+
+			playing->critterInPosition = false;
+
+
+
+
+		}
+		else if (game->collisionCheck(worldClick, nextButton))
+		{
+			std::cout << "select [yes / no]\n";
 		}
 
-		game->setDayScore(dayScore);
+		if (game->collisionCheck(worldClick, playing->passport))
+		{
+			std::cout << "passport clicked\n";
+			playing->hover = true;
 
-		playing->buttonPressSound.play();
-
-		// make critter move left off screen
-		playing->critterMoveLeft = true;
-
-		yesButtonPressed = false;
-		noButtonPressed = false;
-		stampPressed = false;
-
-		yesStampApplied = false;
-		noStampApplied = false;
-
-		playing->hasGeneratedDialougeDetails = false;
-		playing->hasGeneratedPassportDetails = false;
-
-		playing->critterInPosition = false;
-
-	
+		}
 
 
-	}
-	else if (game->collisionCheck(worldClick, nextButton))
-	{
-		std::cout << "select [yes / no]\n";
-	}
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
+		if (game->collisionCheck(worldClick, stampTab) && stampShowing == false)
+		{
+			std::cout << "stamp tab clicked\n";
+			stampMoveLeft = true;
 
-	if (game->collisionCheck(worldClick, playing->passport))
-	{
-		std::cout << "passport clicked\n";
-		playing->hover = true;
+			stampMoveRight = false;
 
-	}
+			stampShowing = true;
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	if (game->collisionCheck(worldClick, stampTab) && stampShowing == false)
-	{
-		std::cout << "stamp tab clicked\n";
-		stampMoveLeft = true;
+		}
 
-		stampMoveRight = false;
+		else if (game->collisionCheck(worldClick, stampTab) && stampShowing == true)
+		{
+			std::cout << "stamp tab clicked\n";
 
-		stampShowing = true;
+			stampMoveLeft = false;
 
+			stampMoveRight = true;
+
+			stampShowing = false;
+
+
+
+		}
+
+		if (game->collisionCheck(worldClick, stamp) && stampShowing == true && (yesButtonPressed || noButtonPressed) && game->currentState == GameState::PLAYING)
+		{
+			stampDown = true;
+			std::cout << "stamp clicked\n";
+			stamp.getImageFromPath("../Data/assets/crossing/UI/stamp pressed.png");
+			ButtonTimer = 0.0f;
+
+			playing->stampSound.play();
+		}
 
 	}
 
-	else if (game->collisionCheck(worldClick, stampTab) && stampShowing == true)
+	if (game->currentState == GameState::DAYEND)
 	{
-		std::cout << "stamp tab clicked\n";
-
-		stampMoveLeft = false;
-
-		stampMoveRight = true;
-
-		stampShowing = false;
-
-
-
-	}
-
-	if (game->collisionCheck(worldClick, stamp) && stampShowing == true && (yesButtonPressed || noButtonPressed))
-	{
-		stampDown = true;
-		std::cout << "stamp clicked\n";
-		stamp.getImageFromPath("../Data/assets/crossing/UI/stamp pressed.png");
-		ButtonTimer = 0.0f;
-
-		playing->stampSound.play();
-	}
-
-
-
-
-	if (game->collisionCheck(worldClick, nextDayButton))
-	{
-		game->currentState = GameState::PLAYING;
+		if (game->collisionCheck(worldClick, nextDayButton))
+		{
+			game->currentState = GameState::PLAYING;
+		}
 	}
 	
 
+	if (game->currentState == GameState::MENU)
+	{
+		if (game->collisionCheck(worldClick, playButton))
+		{
+			playButton.getImageFromPath("../Data/assets/crossing/UI/yes button pressed.png");
+			ButtonTimer = 0.0f;
+			game->currentState = GameState::PLAYING;
+
+		}
+
+		if (game->collisionCheck(worldClick, quitButton))
+		{
+			std::cout << "quit button pressed\n";
+			playButton.getImageFromPath("../Data/assets/crossing/UI/no button pressed.png");
+			ButtonTimer = 0.0f;
+			exit(0);
+		}
+	}
 
 
-	
+
+
+
 
 }
 
@@ -345,5 +380,12 @@ void UImanager::renderDayEndUI(sf::RenderWindow& window)
 {
 	dayEndBackground.render(window);
 	nextDayButton.render(window);
+
+}
+
+void UImanager::renderMenuUI(sf::RenderWindow& window)
+{
+	playButton.render(window);
+	quitButton.render(window);
 
 }

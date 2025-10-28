@@ -19,26 +19,22 @@ MenuState::~MenuState()
 
 bool MenuState::init()
 {
-	playButton.getImageFromPath(".. /Data/assets/crossing/UI/yes button.png");
-	playButton.setPosition(200, 200);
-
-	quitButton.getImageFromPath(".. /Data/assets/crossing/UI/no button.png");
-	quitButton.setPosition(playButton.sprite.getPosition().x + 200, playButton.sprite.getPosition().y);
-
-	playText.setString("would You like to play\nCritters Crossing?");
-	playText.setPosition(200, 100);
+	playText.setString("would You like to play\n Critters Crossing?");
+	playText.setPosition(150, 100);
 	playText.setFont(game->getFont());
 	playText.setFillColor(sf::Color::White);
 	playText.setCharacterSize(30);
+
+	return true;
 }
 
 void MenuState::update(float dt)
 {
-
+	playText.setPosition(160, 100);
 }
 
-void MenuState::render()
+void MenuState::render(sf::RenderWindow &window)
 {
-
+	window.draw(playText);
 }
 
