@@ -21,6 +21,7 @@ set(SOURCE_FILES
     UImanager.cpp
     PlayingState.cpp
     DayEndState.cpp
+    MenuState.cpp
 )
 
 set(HEADER_FILES
@@ -30,6 +31,7 @@ set(HEADER_FILES
     UImanager.h
     PlayingState.h
     DayEndState.h
+    MenuState.h
 )
 
 add_executable(PlatformerSFML ${SOURCE_FILES} ${HEADER_FILES} "MenuState.cpp" "MenuState.h")
