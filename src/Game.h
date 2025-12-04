@@ -48,9 +48,13 @@ public:
 	int getCurrentDay() const { return currentDay; }
 	int getCrittersPerDay() const { return crittersPerDay; }
 	std::string* getDaysOfWeek() { return daysOfWeek; }
-	std::string* getFirstNamesM() { return firstNamesM; }
-	std::string* getFirstNamesF() { return firstNamesF; }
-	std::string* getLastNames() { return lastNames; }
+	//std::string* getFirstNamesM() { return firstNamesM; }
+	//std::string* getLastNames() { return lastNames; }
+	//std::string* getFirstNamesF() { return firstNamesF; }
+
+	const std::vector < std::string>& getFirstNamesMvector() const { return vFirstNamesM; }
+	const std::vector < std::string>& getFirstNamesFvector() const { return vFirstNamesF; }
+	const std::vector <std::string>& getLastNamesVector() const { return vLastNames; }
 
 	std::string* getReasons() { return reasons; }
 	std::string* getReasonsShort() { return reasonsShort; }
@@ -117,18 +121,31 @@ private:
 
 	// Shared arrays
 
-	std::string firstNamesM[3] = { "Fred",
+	std::vector<std::string> vFirstNamesM = { "Fred",
 									"Eliot",
 									"Logan" };
 
-	std::string firstNamesF[2] = { "Willow",
-									"Olivia" };
+	//std::string firstNamesM[3] = { "Fred",
+							//	"Eliot",
+							//		"Logan" };
 
-	std::string lastNames[5] = { "Thistledew",
+	 std::vector<std::string> vFirstNamesF = { "Willow", "Olivia" };
+	
+	// std::string firstNamesF[2] = { "Willow",
+								//	"Olivia" };
+
+	std::vector<std::string> vLastNames = { "Thistledew",
 									"Oakburrow",
 									"Bramblesnout",
 									"Nettlebrook",
 									"Fuzztail" };
+
+
+	// std::string lastNames[5] = { "Thistledew",
+								//	"Oakburrow",
+								//	"Bramblesnout",
+								//	"Nettlebrook",
+								//	"Fuzztail" };
 
 	std::string reasons[5] = { "\ntrade acorns",
 								"\nvisit the forest fair",

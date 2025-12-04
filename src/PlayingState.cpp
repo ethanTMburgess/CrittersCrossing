@@ -7,24 +7,23 @@
 #include <ctime>
 
 PlayingState::PlayingState(Game* game) : game(game)
+, UI (game->getUI())
+, firstNamesMvector(game->getFirstNamesMvector())
+, firstNamesFvector(game->getFirstNamesFvector())
+, lastNamesVector(game->getLastNamesVector())
+, daysOfWeek (game->getDaysOfWeek())
+, reasons  (game->getReasons())
+, reasonsShort  (game->getReasonsShort())
+, passportPhotos (game->getPassportPhotos())
+, currentDay  (game->getCurrentDay())
+, crittersPerDay (game->getCrittersPerDay())
 {
 	srand(time(NULL));
-	UI = game->getUI();
+	
+	
+	
 
-
-	daysOfWeek = game->getDaysOfWeek();
-
-	firstNamesM = game->getFirstNamesM();
-	firstNamesF = game->getFirstNamesF();
-	lastNames = game->getLastNames();
-
-	reasons = game->getReasons();
-	reasonsShort = game->getReasonsShort();
-
-	passportPhotos = game->getPassportPhotos();
-
-	currentDay = game->getCurrentDay();
-	crittersPerDay = game->getCrittersPerDay();
+	
 
 	// std::cout << "playingState CONSTRUCTED AT: " << this << std::endl;
 
@@ -54,6 +53,7 @@ bool PlayingState::init()
 
 	// Initialize text objects with font from Game
 	sf::Font& font = game->getFont();
+	font.setSmooth(false);
 
 	namePPtext.setFont(font);
 	namePPtext.setString("NAME:");
@@ -170,7 +170,7 @@ void PlayingState::update(float dt)
 			UI->ButtonTimer = 0.0f;
 			UI->stampMoveRight = true;
 
-			// game->newDay();
+			
 
 		}
 	}
@@ -491,34 +491,36 @@ void PlayingState::generatePassportDetails()
 
 		if (isMale)
 		{
-			int selectFirstName = rand() % 3;
-			passportFirstName = firstNamesM[selectFirstName];
+			
+			int selectFirstName = rand() % static_cast<int>(firstNamesMvector.size());
+			passportFirstName = firstNamesMvector[selectFirstName];
 
 			while (passportFirstName == firstName)
 			{
-				selectFirstName = rand() % 3;
-				passportFirstName = firstNamesM[selectFirstName];
+				selectFirstName = rand() % static_cast<int>(firstNamesMvector.size());
+				passportFirstName = firstNamesMvector[selectFirstName];
 			}
 		}
 		else
 		{
-			int selectFirstName = rand() % 2;
-			passportFirstName = firstNamesF[selectFirstName];
+			
+			int selectFirstName = rand() % static_cast<int>(firstNamesFvector.size());
+			passportFirstName = firstNamesFvector[selectFirstName];
 
 			while (passportFirstName == firstName)
 			{
-				selectFirstName = rand() % 2;
-				passportFirstName = firstNamesF[selectFirstName];
+				int selectFirstName = rand() % static_cast<int>(firstNamesFvector.size());
+				passportFirstName = firstNamesFvector[selectFirstName];
 			}
 		}
 
-		int selectLastName = rand() % 5;
-		passportLastName = lastNames[selectLastName];
+		int selectFirstName = rand() % static_cast<int>(lastNamesVector.size());
+		passportFirstName = lastNamesVector[selectFirstName];
 
 		while (passportLastName == lastName)
 		{
-			selectLastName = rand() % 5;
-			passportLastName = lastNames[selectLastName];
+			int selectFirstName = rand() % static_cast<int>(lastNamesVector.size());
+			passportFirstName = lastNamesVector[selectFirstName];
 		}
 
 		passportValid = false;

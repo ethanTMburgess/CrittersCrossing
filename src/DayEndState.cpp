@@ -22,6 +22,7 @@ bool DayEndState::init()
 	
 
 	sf::Font& font = game->getFont();
+	font.setSmooth(false);
 
 	
 

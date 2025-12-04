@@ -52,7 +52,7 @@ void GameObject::move(float offset_x, float offset_y)
 
 bool GameObject::WindowRightCollide(sf::RenderWindow& _window)
 {
-    // if ball hits Right of screen
+    // if obj hits Right of screen
     if (
         sprite.getPosition().x + 10 >
         (_window.getSize().x - sprite.getGlobalBounds().width))
@@ -65,7 +65,7 @@ bool GameObject::WindowRightCollide(sf::RenderWindow& _window)
 
 bool GameObject::WindowLeftCollide(sf::RenderWindow& _window)
 {
-    // if ball hits left of screen
+    // if obj hits left of screen
     if (sprite.getPosition().x - 10 < 0)
     {
         std::cout << "left collision detected\n";

@@ -121,8 +121,13 @@ private:
 
     std::string* daysOfWeek;
     std::string* firstNamesM;
-    std::string* firstNamesF;
     std::string* lastNames;
+    std::string* firstNamesF;
+
+    const std::vector<std::string>& firstNamesMvector ;
+    const std::vector<std::string>& firstNamesFvector ;
+    const std::vector<std::string>& lastNamesVector ;
+
     std::string* reasons;
     std::string* reasonsShort;
     std::string* passportPhotos;

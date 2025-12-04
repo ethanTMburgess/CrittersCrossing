@@ -12,11 +12,12 @@ int main()
   std::cout << "You should see a window that opens as well as this writing to console..."
             << std::endl;
 
-  SetProcessDPIAware(); // to stop blurriness on high res screens
+  SetProcessDPIAware(); 
 
   // create window and set up
   sf::RenderWindow window(sf::VideoMode(570, 320), "Critters Crossing");
   sf::Font font;
+  font.setSmooth(false);
   font.loadFromFile("../Data/Fonts/PixelifySans-Regular.ttf");
 
 
