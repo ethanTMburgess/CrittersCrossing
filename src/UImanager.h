@@ -32,6 +32,9 @@ public:
 
 	void setgame(Game* gamePtr) { game = gamePtr; }
 	void setPlayingState(PlayingState* playingState) { playing = playingState; }
+	int mistakesCounter = 3;
+	int getMistakesCounter() const { return mistakesCounter; }
+
 
 	//sounds
 	sf::SoundBuffer buttonPressBuffer;
@@ -58,6 +61,7 @@ public:
 	bool noStampApplied = false;
 	const float stampSpeed = 25.0f;
 
+	
 
 	bool passportValid = false;
 
@@ -95,6 +99,8 @@ private:
 	// UI constants
 	const float windowWidth = 570.0f;
 	const float stampWidth = 167.0f;
+
+	sf::Text mistakeCounterText;
 
 	int dayScore;
 

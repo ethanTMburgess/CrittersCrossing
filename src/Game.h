@@ -44,10 +44,15 @@ public:
 	// Getters
 	sf::RenderWindow& getWindow() { return window; }
 	sf::Font& getFont() { return font; }
-	UImanager* getUI() { return UI; }
+	UImanager* getUI() { return UI.get(); }
 	int getCurrentDay() const { return currentDay; }
 	int getCrittersPerDay() const { return crittersPerDay; }
-	std::string* getDaysOfWeek() { return daysOfWeek; }
+
+	
+
+	
+
+	// std::string* getDaysOfWeek() { return daysOfWeek; }
 	//std::string* getFirstNamesM() { return firstNamesM; }
 	//std::string* getLastNames() { return lastNames; }
 	//std::string* getFirstNamesF() { return firstNamesF; }
@@ -55,19 +60,29 @@ public:
 	const std::vector < std::string>& getFirstNamesMvector() const { return vFirstNamesM; }
 	const std::vector < std::string>& getFirstNamesFvector() const { return vFirstNamesF; }
 	const std::vector <std::string>& getLastNamesVector() const { return vLastNames; }
+	const std::vector <std::string>& getReasonsVector() const { return reasons; }
+	const std::vector <std::string>& getReasonsShortVector() const { return reasonsShort; }
+	const std::vector <std::string>& getPassportPhotosVector() const { return passportPhotos; }
 
-	std::string* getReasons() { return reasons; }
-	std::string* getReasonsShort() { return reasonsShort; }
+	const std::vector <std::string>& getDaysOfWeekVector() const { return daysOfWeek; }
 
-	std::string* getPassportPhotos() { return passportPhotos; }
+
+	// std::string* getReasons() { return reasons; }
+
+	// std::string* getReasonsShort() { return reasonsShort; }
+
+	// std::string* getPassportPhotos() { return passportPhotos; }
 
 	GameState currentState;
 	void setState(GameState newState) { currentState = newState; }
 	void newDay();
 
 	int getDayScore() { return dayScore; }
+	
+	void setCurrentDay(int day) { currentDay = day; }
+
 	void setDayScore(int score) { dayScore = score; }
-	PlayingState* getPlayingState() { return playing; }
+	PlayingState* getPlayingState() { return playing.get(); }
 
 	sf::Color getTextColor()const { return textColor; }
 
@@ -77,7 +92,7 @@ public:
 
 	sf::Music backgroundMusic;
 
-	std::string daysOfWeek[7] = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+	std::vector <std::string> daysOfWeek  = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
 	int currentDay = 0;
 
 	int money = 0;
@@ -94,11 +109,16 @@ private:
 	void renderDayEnd();
 
 	// Systems
-	UImanager* UI;
-	PlayingState* playing;
-	DayEndState* dayEnd;
-	MenuState* menu;
+	// 
+	//UImanager* UI;
+	//PlayingState* playing;
+	//DayEndState* dayEnd;
+	//MenuState* menu;
 
+	std::unique_ptr<UImanager> UI;
+	std::unique_ptr < PlayingState> playing;
+	std::unique_ptr < DayEndState> dayEnd;
+	std::unique_ptr < MenuState> menu;
 
 	GameObject* objectDragged = nullptr;
 	sf::Vector2f dragOffset;
@@ -112,12 +132,13 @@ private:
 
 
 
-
+	
 
 
 	const int crittersPerDay = 5;
 
 	int dayScore = 0;
+	
 
 	// Shared arrays
 
@@ -125,14 +146,11 @@ private:
 									"Eliot",
 									"Logan" };
 
-	//std::string firstNamesM[3] = { "Fred",
-							//	"Eliot",
-							//		"Logan" };
+	
 
 	 std::vector<std::string> vFirstNamesF = { "Willow", "Olivia" };
 	
-	// std::string firstNamesF[2] = { "Willow",
-								//	"Olivia" };
+	
 
 	std::vector<std::string> vLastNames = { "Thistledew",
 									"Oakburrow",
@@ -141,30 +159,38 @@ private:
 									"Fuzztail" };
 
 
-	// std::string lastNames[5] = { "Thistledew",
-								//	"Oakburrow",
-								//	"Bramblesnout",
-								//	"Nettlebrook",
-								//	"Fuzztail" };
+	
 
-	std::string reasons[5] = { "\ntrade acorns",
+
+	std:: vector <std::string> reasons = { "\ntrade acorns",
+
 								"\nvisit the forest fair",
+
 								"fix \na broken cart wheel",
+
 								"\nvisit the shops",
+
 								"\nmeet somebody by the old well" };
 
-	std::string reasonsShort[5] = { "trading",
+
+	
+
+	std::vector <std::string> reasonsShort = { "trading",
 									"Fair",
+
 									"Handy work",
+
 									"Shopping",
+
 									"social visit", };
 
-	std::string passportPhotos[5] = { "../Data/assets/crossing/critters/frog passport image.png",
+	std::vector <std::string> passportPhotos = { "../Data/assets/crossing/critters/frog passport image.png",
 									 "../Data/assets/crossing/critters/mouse passport image.png",
 									 "../Data/assets/crossing/critters/duck passport image.png",
 									 "../Data/assets/crossing/critters/racoon passport image.png",
 									 "../Data/assets/crossing/critters/rabbit passport image.png" };
 
+	
 };
 
 #endif // PLATFORMER_GAME_H

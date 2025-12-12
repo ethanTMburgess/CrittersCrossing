@@ -11,10 +11,10 @@ PlayingState::PlayingState(Game* game) : game(game)
 , firstNamesMvector(game->getFirstNamesMvector())
 , firstNamesFvector(game->getFirstNamesFvector())
 , lastNamesVector(game->getLastNamesVector())
-, daysOfWeek (game->getDaysOfWeek())
-, reasons  (game->getReasons())
-, reasonsShort  (game->getReasonsShort())
-, passportPhotos (game->getPassportPhotos())
+, daysOfWeekVector (game->getDaysOfWeekVector())
+, reasonsVector  (game->getReasonsVector())
+, reasonsShortVector  (game->getReasonsShortVector())
+, passportPhotosVector (game->getPassportPhotosVector())
 , currentDay  (game->getCurrentDay())
 , crittersPerDay (game->getCrittersPerDay())
 {
@@ -107,6 +107,8 @@ void PlayingState::update(float dt)
 {
 
 	UI->UpdateUI(dt, passport.sprite.getPosition(), passportOpened);
+	UI->mistakesCounter;
+	UI->getMistakesCounter();
 
 
 	currentDay = game->getCurrentDay();
@@ -115,13 +117,13 @@ void PlayingState::update(float dt)
 
 
 
-	calendarText.setString(daysOfWeek[currentDay]);
+	calendarText.setString(daysOfWeekVector[currentDay]);
 
 
 
 
 
-	calendarText.setString(daysOfWeek[game->getCurrentDay()]);
+	calendarText.setString(daysOfWeekVector[game->getCurrentDay()]);
 
 
 
@@ -219,12 +221,23 @@ void PlayingState::update(float dt)
 			crittersSeen++;
 			if (crittersSeen >= crittersPerDay)
 			{
-				game->newDay();
+				tryNewDay = true;
+				//game->newDay();
+			}
+			else
+			{
+				trySpawnCritter = true;
 			}
 
 
-			selectCritter();
+			// selectCritter();
+			// critterMoveLeft = false;
+
 			critterMoveLeft = false;
+			critterInPosition = false;
+
+			hasGeneratedDialougeDetails = false;
+			hasGeneratedPassportDetails = false;
 
 
 
@@ -300,13 +313,13 @@ void PlayingState::update(float dt)
 
 
 
-	Game mouseClicked(sf::RenderWindow & window, sf::Event event);
+	// Game mouseClicked(sf::RenderWindow & window, sf::Event event);
 
 
 
 	nameSpeechText.setString(nameDialogue);
 	reasonSpeechText.setString(reasonDialogue);
-	calendarText.setString(daysOfWeek[currentDay]);
+	calendarText.setString(daysOfWeekVector[currentDay]);
 
 
 
@@ -453,7 +466,7 @@ int PlayingState::selectCritter() {
 
 	}
 
-	passportPhoto.getImageFromPath(passportPhotos[chosenCritter - 1]);
+	passportPhoto.getImageFromPath(passportPhotosVector[chosenCritter - 1]);
 
 	if (!hasGeneratedDialougeDetails)
 	{
@@ -480,7 +493,7 @@ void PlayingState::generatePassportDetails()
 	passportFirstName = firstName;
 	passportLastName = lastName;
 	passportReason = reasonDialoge;
-	passportDay = daysOfWeek[game->currentDay];
+	passportDay = daysOfWeekVector[game->getCurrentDay()];
 
 
 
@@ -532,12 +545,12 @@ void PlayingState::generatePassportDetails()
 		std::cout << "-------------------\nreason mismatch - DENY\n";
 
 		int selectReason = rand() % 5;
-		passportReason = reasonsShort[selectReason];
+		passportReason = reasonsShortVector[selectReason];
 
 		while (passportReason == reasonDialoge)
 		{
 			selectReason = rand() % 5;
-			passportReason = reasonsShort[selectReason];
+			passportReason = reasonsShortVector[selectReason];
 		}
 
 		passportValid = false;
@@ -549,12 +562,12 @@ void PlayingState::generatePassportDetails()
 		std::cout << "--------------------\nday mismatch - DENY\n";
 
 		int selectDay = rand() % 7;
-		passportDay = daysOfWeek[selectDay];
+		passportDay = daysOfWeekVector[selectDay];
 
-		while (passportDay == daysOfWeek[currentDay])
+		while (passportDay == daysOfWeekVector[currentDay])
 		{
 			selectDay = rand() % 7;
-			passportDay = daysOfWeek[selectDay];
+			passportDay = daysOfWeekVector[selectDay];
 		}
 
 		passportValid = false;
@@ -574,7 +587,7 @@ void PlayingState::generatePassportDetails()
 				selectPhoto = rand() % 5;
 			}
 
-			passportPhoto.getImageFromPath(passportPhotos[selectPhoto]);
+			passportPhoto.getImageFromPath(passportPhotosVector[selectPhoto]);
 		}
 
 		passportValid = false;
@@ -586,7 +599,7 @@ void PlayingState::generatePassportDetails()
 	{
 		std::cout << "--------------------\nAll correct - APPROVE\n";
 
-		passportDay = daysOfWeek[game->currentDay];
+		passportDay = daysOfWeekVector[game->currentDay];
 
 		passportValid = true;
 
@@ -603,13 +616,13 @@ void PlayingState::generateDialougeDetails()
 
 	// generate reason for entry
 	int selectReason = rand() % 5;
-	newReason = reasons[selectReason];
-	reasonDialoge = reasonsShort[selectReason];
+	newReason = reasonsVector[selectReason];
+	reasonDialoge = reasonsShortVector[selectReason];
 
 	while (newReason == lastReason)
 	{
 		int selectReason = rand() % 5;
-		newReason = reasons[selectReason];
+		newReason = reasonsVector[selectReason];
 	}
 
 

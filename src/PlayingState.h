@@ -28,6 +28,11 @@ public:
     void generateDialougeDetails();
     void generatePassportDetails();
 
+    bool tryNewDay = false;
+    bool trySpawnCritter = false;
+    bool shouldCreateNewDay() const { return tryNewDay; }
+    bool shouldSpawnCritter() const { return trySpawnCritter; }
+    void TryEventClear() { tryNewDay = false; trySpawnCritter = false; }
 
     sf::Text namePPtext;
     sf::Text dayPPtext;
@@ -63,6 +68,9 @@ public:
     int crittersSeen = 0;
 
     int dayScore = 0;
+
+    GameObject critter;
+
 private:
     Game* game;
     UImanager* UI;
@@ -76,7 +84,7 @@ private:
     GameObject yesStamp;
     GameObject noStamp;
     GameObject passportPhoto;
-    GameObject critter;
+    
 
     // Text objects
   
@@ -119,18 +127,22 @@ private:
     GameObject* objectDragged = nullptr;
     sf::Vector2f dragOffset;
 
-    std::string* daysOfWeek;
-    std::string* firstNamesM;
-    std::string* lastNames;
-    std::string* firstNamesF;
+   //  std::string* daysOfWeek;
+   //  std::string* firstNamesM;
+    // std::string* lastNames;
+    // std::string* firstNamesF;
 
     const std::vector<std::string>& firstNamesMvector ;
     const std::vector<std::string>& firstNamesFvector ;
     const std::vector<std::string>& lastNamesVector ;
+    const std::vector<std::string>& daysOfWeekVector;
+    const std::vector<std::string>& reasonsVector;
+    const std::vector<std::string>& reasonsShortVector;
+    const std::vector<std::string>& passportPhotosVector;
 
-    std::string* reasons;
-    std::string* reasonsShort;
-    std::string* passportPhotos;
+    // std::string* reasons;
+   // std::string* reasonsShort;
+    // std::string* passportPhotos;
 
    
 

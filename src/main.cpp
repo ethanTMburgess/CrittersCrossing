@@ -64,10 +64,14 @@ int main()
           if (event.type == sf::Event::Closed)
               window.close();
 
-          if (event.key.code == sf::Keyboard::Space)
+          if (event.type == sf::Event::KeyPressed)
           {
-			  game.keyPressed(event);
+              if (event.key.code == sf::Keyboard::Space)
+              {
+                  game.keyPressed(event);
+              }
           }
+         
 
           if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left)
           {

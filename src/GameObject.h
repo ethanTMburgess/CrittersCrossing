@@ -38,7 +38,7 @@ private:
 	Vector2 vector;
 
 	float speed = 0;
-	bool visible;
+	bool visible = true;
 
 };
 

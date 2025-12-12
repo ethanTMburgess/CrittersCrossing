@@ -18,22 +18,21 @@ Game::Game(sf::RenderWindow& game_window)
 	: window(game_window)
 {
 	srand(time(NULL));
-	UI = new UImanager();
-	playing = new PlayingState(this);
-	dayEnd = new DayEndState(this);
-	menu = new MenuState(this);
+
+	UI = std::make_unique<UImanager>();
+	playing = std::make_unique<PlayingState>(this);
+	dayEnd = std::make_unique<DayEndState>(this);
+	menu = std::make_unique<MenuState>(this);
 
 	UI->setgame(this);
-	UI->setPlayingState(playing);
+	UI->setPlayingState(playing.get());
 
 
 }
 
 Game::~Game()
 {
-	delete UI;
-	delete playing;
-	delete dayEnd;
+	
 
 
 }
@@ -42,6 +41,7 @@ bool Game::init()
 {
 
 	currentState = GameState::MENU;
+	
 
 	if (!backgroundMusic.openFromFile("../Data/assets/sound/BackgroundMusic.wav"))
 	{
@@ -67,8 +67,11 @@ bool Game::init()
 
 	UI->initPlayingUI();
 
-	UImanager* mouseClicked();
+	// UImanager* mouseClicked();
 
+	UI->initMenuUI();
+	dayEnd->init();
+	UI->initdayEndUI();
 
 	sf::Vector2f stampBasePosition = UI->stamp.sprite.getPosition();
 
@@ -106,6 +109,29 @@ void Game::update(float dt)
 	}
 
 
+	if (currentState == GameState::PLAYING)
+	{
+
+		// std::cout << "updating handling new day / critter spawn\n";
+		if (playing->shouldCreateNewDay())
+		{
+			playing->TryEventClear();
+			newDay();
+
+		}
+		else if (playing->shouldSpawnCritter())
+		{
+			playing->TryEventClear();
+			playing->selectCritter();
+			playing->critter.setPosition(78 - 178, 97);
+
+
+			playing->critterMoveLeft = false;
+
+			playing->critterInPosition = false;
+
+		}
+	}
 
 }
 
@@ -117,7 +143,7 @@ void Game::render()
 	switch (currentState)
 	{
 	case GameState::MENU:
-		UI->initMenuUI();
+		// UI->initMenuUI();
 		UI->renderMenuUI(window);
 		menu->init();
 		menu->render(window);
@@ -129,7 +155,7 @@ void Game::render()
 		break;
 
 	case GameState::DAYEND:
-		dayEnd->init();
+		//dayEnd->init();
 		dayEnd->render(window);
 		UI->initdayEndUI();
 		UI->renderDayEndUI(window);
@@ -265,11 +291,28 @@ void Game::newDay()
 		currentDay = 0;
 	}
 
+
+	playing->selectCritter();
+
+	playing->generateDialougeDetails();
+	playing->generatePassportDetails();
+
+	playing->critter.setPosition(78 - 178, 97);
+	playing->critterMoveLeft = false;
+	playing->critterInPosition = false;
 	currentState = GameState::DAYEND;
 	money = money + dayScore * 5;
 	std::cout << "\n\n------------\n\nDay Score: " << dayScore << "\nTotal Money: $" << money << "\n\n------------\n\n" << std::endl;
 
+	if (dayEnd)
+	{
+		dayEnd -> init();
 
+	}
+	if (UI)
+	{
+		UI->initdayEndUI();
+	}
 
 }
 
@@ -321,6 +364,8 @@ bool Game::collisionCheck(const sf::Vector2f& click, GameObject& object)
 
 	// Check if the sprite's texture pointer is valid
 	const sf::Texture* texture = sprite->getTexture();
+
+	
 	if (texture == nullptr)
 	{
 		std::cout << "CRITICAL: sprite texture is null!" << std::endl;

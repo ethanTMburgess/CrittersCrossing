@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-GameObject::GameObject()
+GameObject::GameObject() : visible (true)
 {
     
 }
@@ -20,12 +20,15 @@ bool GameObject::getImageFromPath(std::string _path)
         return false;
     }
     sprite.setTexture(texture);
-
+    visible = true;
     return true;
 }
 
 void GameObject::render(sf::RenderWindow& _window)
 {
+    
+    if (!visible) return;
+    if (sprite.getTexture() == nullptr) return;
     _window.draw(sprite);
 }
 

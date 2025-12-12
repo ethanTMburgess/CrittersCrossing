@@ -16,13 +16,14 @@
 
 
 
-UImanager::UImanager()
+UImanager::UImanager() 
 {
 
 
 	playing = nullptr;
 	game = nullptr;
 
+	
 
 }
 
@@ -39,7 +40,7 @@ bool UImanager::initPlayingUI()
 	stampMoveRight = false;
 
 
-
+	
 
 	stamp.getImageFromPath("../Data/assets/crossing/UI/stamp.png");
 	stamp.setPosition(570, 90);
@@ -64,6 +65,12 @@ bool UImanager::initPlayingUI()
 
 	officeBack.getImageFromPath("../Data/assets/crossing/UI/grey office back.png");
 	officeBack.setPosition(1, 1);
+
+	mistakeCounterText.setFont(game->getFont());
+	mistakeCounterText.setCharacterSize(16);
+	mistakeCounterText.setFillColor(game->getTextColor());
+	mistakeCounterText.setPosition(15, 15);
+	mistakeCounterText.setString("Mistakes: " + std::to_string(mistakesCounter));
 
 
 
@@ -191,6 +198,7 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 			{
 				std::cout << "passport was valid but denied\n";
 				dayScore = dayScore - 1;
+				mistakesCounter--;
 			}
 
 			else if (noButtonPressed && !playing->passportValid)
@@ -203,12 +211,14 @@ void UImanager::mouseClicked(sf::RenderWindow& window, sf::Event event)
 			{
 				std::cout << "passport was invalid but allowed\n";
 				dayScore = dayScore - 1;
+				mistakesCounter--;
 			}
 
 			else if (yesButtonPressed && playing->passportValid)
 			{
 				std::cout << "passport was valid and allowed\n";
 				dayScore = dayScore + 1;
+				
 			}
 
 			game->setDayScore(dayScore);
@@ -303,7 +313,25 @@ void UImanager::UpdateUI(float dt, const sf::Vector2f& passportPos, bool passpor
 {
 	stampTab.setPosition(stamp.sprite.getPosition().x - 15, stamp.sprite.getPosition().y + 32);
 	stampShadow.setPosition(stamp.sprite.getPosition().x, stamp.sprite.getPosition().y + 70);
+	mistakeCounterText.setString("Mistakes Remaining: " + std::to_string(getMistakesCounter()));
+	mistakeCounterText.setFillColor(game->getTextColor());
+	mistakeCounterText.setPosition(5, 5);
 
+	// prints forever (debugging)
+	// 
+	// std::cout << mistakesCounter << std::endl;
+
+	if (mistakesCounter <= 0)
+	{
+		mistakesCounter = 3;
+		std::cout << "too many mistakes, returning to menu\n";
+		game->setCurrentDay(0);
+		game->setDayScore(0);
+		playing->crittersSeen = 0;
+		game->setState(GameState::MENU);
+	}
+	
+	
 	if (stampMoveLeft)
 	{
 		stamp.setVector(-1, 0);
@@ -343,6 +371,8 @@ void UImanager::renderPlayingUI(sf::RenderWindow& window, bool passportOpened)
 	stampShadow.render(window);
 	stamp.render(window);
 	stampTab.render(window);
+
+	window.draw(mistakeCounterText);
 }
 
 void UImanager::renderDayEndUI(sf::RenderWindow& window)
