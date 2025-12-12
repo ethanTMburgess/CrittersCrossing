@@ -367,7 +367,7 @@ void UImanager::renderPlayingUI(sf::RenderWindow& window, bool passportOpened)
 	noButton.render(window);
 	nextButton.render(window);
 
-	// Render stamp system
+	
 	stampShadow.render(window);
 	stamp.render(window);
 	stampTab.render(window);

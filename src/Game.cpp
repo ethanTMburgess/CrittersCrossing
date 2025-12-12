@@ -211,14 +211,14 @@ void Game::mouseMoved(sf::Event event)
 		sf::Vector2i pixelPos{ event.mouseMove.x, event.mouseMove.y };
 		sf::Vector2f worldPos = window.mapPixelToCoords(pixelPos);
 
-		// will pull the object based on mouse. offset should allow for the passport to not snap
+		
 		objectDragged->setPosition(worldPos.x - dragOffset.x, (worldPos.y - dragOffset.y - 5));
 
 		//std::cout << "drraaaaaagged\n";
 
 		sf::Vector2f passportPos = playing->passport.sprite.getPosition();
 
-		// if passport is dragged far enough up, it opens. if dragged back down, it closes
+		
 		if (passportPos.x > 259 && playing->passportOpened == false)
 		{
 
